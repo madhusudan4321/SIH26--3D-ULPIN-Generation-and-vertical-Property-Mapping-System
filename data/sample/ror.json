@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "source": "DEMO_DATA",
+    "description": "Synthetic demonstration Record of Rights. NOT real government ownership data.",
+    "geographic_context": "New Delhi, India",
+    "created": "2026-08-29"
+  },
+  "records": [
+    {
+      "ror_id": "ROR001",
+      "parcel_id": "P001",
+      "owner_name": "Demo Owner A",
+      "area": 120.0,
+      "land_use": "Residential",
+      "rights": "Freehold",
+      "source": "DEMO_DATA"
+    },
+    {
+      "ror_id": "ROR002",
+      "parcel_id": "P001",
+      "owner_name": "Demo Owner B",
+      "area": 95.0,
+      "land_use": "Residential",
+      "rights": "Freehold",
+      "source": "DEMO_DATA"
+    },
+    {
+      "ror_id": "ROR003",
+      "parcel_id": "P001",
+      "owner_name": "Demo Owner C",
+      "area": 85.0,
+      "land_use": "Commercial",
+      "rights": "Leasehold",
+      "source": "DEMO_DATA"
+    },
+    {
+      "ror_id": "ROR004",
+      "parcel_id": "P001",
+      "owner_name": "Demo Owner D",
+      "area": 110.0,
+      "land_use": "Residential",
+      "rights": "Freehold",
+      "source": "DEMO_DATA"
+    }
+  ]
+}
