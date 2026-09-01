@@ -8,6 +8,7 @@ z_min / z_max define the vertical extent relative to ground.
 import uuid
 from datetime import datetime, timezone
 
+from geoalchemy2 import Geometry
 from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -30,6 +31,12 @@ class Floor(Base):
     z_min = Column(Float, nullable=False, default=0.0)
     z_max = Column(Float, nullable=False, default=3.0)
     elevation_source = Column(String(50), nullable=True, default="manual")
+    geometry_source = Column(String(50), nullable=True, default="synthetic_subdivision")
+
+    # Optional floor geometry polygon stored in PostGIS
+    floor_geometry = Column(
+        Geometry("POLYGON", srid=4326, spatial_index=True), nullable=True
+    )
 
     created_at = Column(
         DateTime(timezone=True),

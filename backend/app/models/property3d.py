@@ -4,9 +4,10 @@ Property3D ORM Model
 Represents an individual 3D property unit (shop, apartment, etc.)
 within a floor of a building.
 
-Key design decisions (per user corrections):
+Key design decisions:
 - geometry is NULLABLE — unit geometry may not be available
-- geometry_source tracks provenance (real vs synthetic vs unavailable)
+- geometry_source tracks provenance (geojson vs floorplan vs cad vs bim vs lidar vs synthetic_subdivision)
+- sub_ulpin tracks first-class sub-unit ULPIN identifier
 - data_source tracks how the property data was created
 - ror_id is NULLABLE — some properties may lack RoR records
 - ulpin has a UNIQUE constraint (prototype ULPIN)
@@ -29,6 +30,7 @@ class Property3D(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     property_id = Column(String(50), unique=True, nullable=False, index=True)
     ulpin = Column(String(100), unique=True, nullable=False, index=True)
+    sub_ulpin = Column(String(100), nullable=True, index=True)
 
     # UUID FKs to Building and Floor
     building_uuid = Column(
@@ -38,13 +40,11 @@ class Property3D(Base):
         UUID(as_uuid=True), ForeignKey("floors.id"), nullable=False
     )
 
-    unit_id = Column(String(50), nullable=True)
+    unit_id = Column(String(50), nullable=True, index=True)
     property_type = Column(String(50), nullable=True)  # commercial/residential/mixed
     area = Column(Float, nullable=True)
 
-    # Geometry is NULLABLE — may not be available for every unit.
-    # When NULL, the UI must indicate "geometry unavailable".
-    # Never silently substitute building footprint as real unit boundary.
+    # Geometry is NULLABLE — unit geometry stored in EPSG:4326
     geometry = Column(
         Geometry("POLYGON", srid=4326, spatial_index=True), nullable=True
     )
@@ -58,10 +58,10 @@ class Property3D(Base):
     # Provenance tracking
     data_source = Column(
         String(50), nullable=False, default="manual"
-    )  # uploaded_document / manual / synthetic_demo / geojson
+    )  # uploaded_document / manual / DEMO_DATA / geojson
     geometry_source = Column(
         String(50), nullable=True
-    )  # uploaded_geojson / floor_plan / manual / synthetic_subdivision / building_footprint / NULL
+    )  # geojson / floorplan / cad / bim / photogrammetry / lidar / synthetic_subdivision / NULL
     verification_status = Column(
         String(50), nullable=False, default="unverified"
     )  # unverified / user_verified / survey_verified
@@ -83,4 +83,4 @@ class Property3D(Base):
     floor = relationship("Floor", back_populates="properties")
 
     def __repr__(self):
-        return f"<Property3D {self.property_id} ulpin={self.ulpin}>"
+        return f"<Property3D {self.property_id} ulpin={self.ulpin} sub_ulpin={self.sub_ulpin}>"

@@ -1,0 +1,17 @@
+building_id,building_name,parcel_id,latitude,longitude,height,floor_number,unit_id,property_type,area,ror_id,owner,land_use,rights
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,1,F1-001,commercial,120.0,ROR-MED-101,Medanta Holdings,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,1,F1-002,commercial,140.0,ROR-MED-102,Medanta Pharmacy,Commercial,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,2,F2-001,commercial,130.0,ROR-MED-103,Cardiology Dept,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,2,F2-002,commercial,150.0,ROR-MED-104,Radiology Wing,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,3,F3-001,commercial,125.0,ROR-MED-105,Neurology Dept,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,3,F3-002,commercial,145.0,ROR-MED-106,ICU Unit A,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,4,F4-001,commercial,130.0,ROR-MED-107,Operation Theatre 1,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,4,F4-002,commercial,150.0,ROR-MED-108,Operation Theatre 2,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,5,F5-001,commercial,110.0,ROR-MED-109,Private Ward 5A,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,5,F5-002,commercial,135.0,ROR-MED-110,Private Ward 5B,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,6,F6-001,commercial,115.0,ROR-MED-111,Executive Suite 601,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,6,F6-002,commercial,140.0,ROR-MED-112,Executive Suite 602,Healthcare,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,7,F7-001,commercial,105.0,ROR-MED-113,Admin Office 701,Commercial,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,7,F7-002,commercial,125.0,ROR-MED-114,Admin Office 702,Commercial,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,8,F8-001,commercial,95.0,ROR-MED-115,Directorate 801,Commercial,Freehold
+MEDANTA-LKO-TEST-02,Medanta Super Speciality Hospital Lucknow,P-MEDANTA-LKO,26.7776953,80.9856814,24.0,8,F8-002,commercial,115.0,ROR-MED-116,Boardroom 802,Commercial,Freehold

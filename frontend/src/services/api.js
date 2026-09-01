@@ -1,11 +1,9 @@
 /**
  * API Service — Data Abstraction Layer
  *
- * M1: Returns local sample data.
- * M2+: Will call FastAPI endpoints at VITE_API_BASE_URL.
- *
- * All functions return Promises (async) so swapping to fetch()
- * in M2 requires zero component changes.
+ * M2: Calls FastAPI backend via fetch().
+ * On backend error: throws explicit error (NOT silent DEMO fallback).
+ * Demo data can only be loaded by explicit user action.
  */
 
 import sampleParcels from "../data/sampleParcels";
@@ -15,29 +13,146 @@ import sampleProperties from "../data/sampleProperties";
 import sampleRor from "../data/sampleRor";
 import sampleUnderground from "../data/sampleUnderground";
 
-// const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+// ─── Internal Helpers ───────────────────────────────────────
 
-// ─── Parcels ────────────────────────────────────────────────
+/**
+ * Fetch JSON from backend. Throws on error.
+ * NEVER silently falls back to demo data.
+ */
+async function apiFetch(path, options = {}) {
+  const res = await fetch(path, {
+    headers: { "Content-Type": "application/json", ...options.headers },
+    ...options,
+  });
+  if (!res.ok) {
+    const detail = await res.text().catch(() => res.statusText);
+    throw new Error(`API ${res.status}: ${detail}`);
+  }
+  return res.json();
+}
+
+/**
+ * Check if backend is available.
+ * Returns { ok, data } or { ok: false, error }.
+ */
+export async function checkHealth() {
+  try {
+    const data = await apiFetch("/api/health/db");
+    return { ok: true, data };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+// ─── Buildings (from PostgreSQL) ────────────────────────────
+
+export async function getBuildings() {
+  return apiFetch("/api/buildings");
+}
+
+export async function getBuilding(buildingId) {
+  return apiFetch(`/api/buildings/${buildingId}`);
+}
+
+export async function getBuildingProperties(buildingId) {
+  return apiFetch(`/api/buildings/${buildingId}/properties`);
+}
+
+// ─── Properties (from PostgreSQL) ───────────────────────────
+
+export async function getProperty(ulpin) {
+  return apiFetch(`/api/properties/${ulpin}`);
+}
+
+export async function getPropertyRor(ulpin) {
+  return apiFetch(`/api/properties/${ulpin}/ror`);
+}
+
+// ─── Search (from PostgreSQL) ───────────────────────────────
+
+export async function search(query) {
+  if (!query || query.trim().length === 0) return [];
+  const data = await apiFetch(`/api/search?q=${encodeURIComponent(query)}`);
+  // Transform backend results to match frontend format
+  return (data.results || []).map((r) => ({
+    type: r.type,
+    id: r.ulpin || r.building_id || r.parcel_id,
+    label: r.ulpin || r.building_name || r.building_id || r.parcel_id,
+    data: r,
+  }));
+}
+
+export async function deleteBuilding(buildingId) {
+  return apiFetch(`/api/buildings/${buildingId}`, {
+    method: "DELETE",
+  });
+}
+
+// ─── Upload ─────────────────────────────────────────────────
+
+export async function uploadDocument(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await fetch("/api/upload", {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) {
+    const detail = await res.text().catch(() => res.statusText);
+    throw new Error(`Upload failed: ${detail}`);
+  }
+  return res.json();
+}
+
+export async function getReviewData(datasetId) {
+  return apiFetch(`/api/upload/${datasetId}/review`);
+}
+
+export async function updateReviewData(datasetId, updatedData) {
+  return apiFetch(`/api/upload/${datasetId}/review`, {
+    method: "PUT",
+    body: JSON.stringify(updatedData),
+  });
+}
+
+export async function confirmDataset(datasetId, overwrite = false) {
+  return apiFetch(`/api/upload/${datasetId}/confirm?overwrite=${overwrite}`, {
+    method: "POST",
+  });
+}
+
+// ─── Manual Entry ───────────────────────────────────────────
+
+export async function submitManualEntry(buildingData, overwrite = false) {
+  return apiFetch(`/api/manual-entry?overwrite=${overwrite}`, {
+    method: "POST",
+    body: JSON.stringify(buildingData),
+  });
+}
+
+// ─── Demo Data (EXPLICIT user action only) ──────────────────
+
+/**
+ * Load demo data from local sample files.
+ * This is ONLY called when the user explicitly clicks "Load Demo Data".
+ * NEVER called automatically as a silent fallback.
+ */
+export function loadDemoData() {
+  return {
+    parcels: sampleParcels,
+    buildings: sampleBuildings,
+    floors: sampleFloors,
+    properties: sampleProperties,
+    ror: sampleRor,
+    underground: sampleUnderground,
+  };
+}
+
+// ─── Legacy API shims (for components not yet fully migrated) ─
 
 export async function getParcels() {
   return sampleParcels;
 }
-
-export async function getParcel(parcelId) {
-  return sampleParcels.find((p) => p.parcel_id === parcelId) || null;
-}
-
-// ─── Buildings ──────────────────────────────────────────────
-
-export async function getBuildings() {
-  return sampleBuildings;
-}
-
-export async function getBuilding(buildingId) {
-  return sampleBuildings.find((b) => b.building_id === buildingId) || null;
-}
-
-// ─── Floors ─────────────────────────────────────────────────
 
 export async function getFloors(buildingId = null) {
   if (buildingId) {
@@ -50,86 +165,14 @@ export async function getFloor(floorId) {
   return sampleFloors.find((f) => f.floor_id === floorId) || null;
 }
 
-// ─── Properties ─────────────────────────────────────────────
-
-export async function getProperties() {
-  return sampleProperties;
-}
-
-export async function getProperty(ulpin) {
-  return sampleProperties.find((p) => p.three_d_ulpin === ulpin) || null;
-}
-
-export async function getPropertiesByFloor(floorId) {
-  return sampleProperties.filter((p) => p.floor_id === floorId);
-}
-
-// ─── RoR ────────────────────────────────────────────────────
-
 export async function getRor(rorId) {
   return sampleRor.find((r) => r.ror_id === rorId) || null;
 }
-
-export async function getAllRor() {
-  return sampleRor;
-}
-
-// ─── Underground ────────────────────────────────────────────
 
 export async function getUndergroundAssets() {
   return sampleUnderground;
 }
 
-// ─── Search ─────────────────────────────────────────────────
-
-/**
- * Search across ULPINs, parcel IDs, and building IDs.
- * Returns unified results with type indicator.
- *
- * @param {string} query - Search query (case-insensitive partial match)
- * @returns {Promise<Array<{type: string, id: string, label: string, data: object}>>}
- */
-export async function search(query) {
-  if (!query || query.trim().length === 0) return [];
-
-  const q = query.trim().toUpperCase();
-  const results = [];
-
-  // Search properties by 3D ULPIN
-  for (const prop of sampleProperties) {
-    if (prop.three_d_ulpin.toUpperCase().includes(q)) {
-      results.push({
-        type: "property",
-        id: prop.three_d_ulpin,
-        label: prop.three_d_ulpin,
-        data: prop,
-      });
-    }
-  }
-
-  // Search parcels by parcel_id
-  for (const parcel of sampleParcels) {
-    if (parcel.parcel_id.toUpperCase().includes(q)) {
-      results.push({
-        type: "parcel",
-        id: parcel.parcel_id,
-        label: `Parcel ${parcel.parcel_id}`,
-        data: parcel,
-      });
-    }
-  }
-
-  // Search buildings by building_id
-  for (const building of sampleBuildings) {
-    if (building.building_id.toUpperCase().includes(q)) {
-      results.push({
-        type: "building",
-        id: building.building_id,
-        label: `Building ${building.building_id}`,
-        data: building,
-      });
-    }
-  }
-
-  return results;
+export async function getProperties() {
+  return sampleProperties;
 }

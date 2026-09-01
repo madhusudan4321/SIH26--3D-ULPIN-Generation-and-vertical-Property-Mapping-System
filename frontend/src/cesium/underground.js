@@ -5,7 +5,6 @@
  * Assets are displayed below the surface using terrain-relative depths.
  *
  * This is purely synthetic demo data visualization.
- * No real GPR or underground detection is performed.
  */
 
 import * as Cesium from "cesium";
@@ -16,26 +15,37 @@ import { getUndergroundColor } from "./utils";
  *
  * @param {Cesium.Viewer} viewer
  * @param {Array} assets - Underground asset records from api.js
- * @param {number} terrainHeight - Actual terrain height at sample location
  * @returns {Array<Cesium.Entity>} Created entities
  */
-export function createUndergroundEntities(viewer, assets, terrainHeight) {
+export function createUndergroundEntities(viewer, assets) {
   const entities = [];
+  if (!Array.isArray(assets)) return entities;
 
   for (const asset of assets) {
-    const color = getUndergroundColor(asset.type);
-    // depth is negative (e.g., -2.0 means 2m below surface)
-    const absHeight = terrainHeight + asset.depth;
+    if (!asset || !asset.coordinates) continue;
 
-    // Create Cartesian3 positions at underground depth
+    const color = getUndergroundColor(asset.type);
+    const depth = typeof asset.depth === "number" && !isNaN(asset.depth) ? asset.depth : -2.0;
+
+    // Create Cartesian3 positions at depth below ground
     const positions = [];
-    for (const [lon, lat] of asset.coordinates) {
-      positions.push(Cesium.Cartesian3.fromDegrees(lon, lat, absHeight));
+    if (Array.isArray(asset.coordinates)) {
+      for (const pt of asset.coordinates) {
+        if (Array.isArray(pt) && pt.length >= 2) {
+          const lon = Number(pt[0]);
+          const lat = Number(pt[1]);
+          if (!isNaN(lon) && !isNaN(lat)) {
+            positions.push(Cesium.Cartesian3.fromDegrees(lon, lat, depth));
+          }
+        }
+      }
     }
+
+    if (positions.length < 2) continue;
 
     const entity = viewer.entities.add({
       id: `underground:${asset.asset_id}`,
-      name: `${asset.type.replace(/_/g, " ")} (${asset.asset_id})`,
+      name: `${(asset.type || "").replace(/_/g, " ")} (${asset.asset_id})`,
       polyline: {
         positions: positions,
         width: 5,
@@ -49,7 +59,7 @@ export function createUndergroundEntities(viewer, assets, terrainHeight) {
         entityType: "underground",
         asset_id: asset.asset_id,
         type: asset.type,
-        depth: asset.depth,
+        depth: depth,
         source: asset.source,
       },
     });

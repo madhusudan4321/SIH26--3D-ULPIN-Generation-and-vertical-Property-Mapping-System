@@ -46,6 +46,11 @@ def init_db():
     print("\nCreating tables (IF NOT EXISTS)...")
     Base.metadata.create_all(bind=engine)
 
+    # Column migrations for existing tables
+    with engine.connect() as conn:
+        conn.execute(text("ALTER TABLE buildings ADD COLUMN IF NOT EXISTS footprint GEOMETRY(POLYGON, 4326);"))
+        conn.commit()
+
     # Verify
     inspector = inspect(engine)
     tables = inspector.get_table_names()

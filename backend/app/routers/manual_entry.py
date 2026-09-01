@@ -8,7 +8,7 @@ Uses the SAME building_processor.py pipeline as document upload.
 Both workflows converge at the same processing point.
 """
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -19,7 +19,11 @@ router = APIRouter(prefix="/api", tags=["manual-entry"])
 
 
 @router.post("/manual-entry")
-async def manual_entry(data: BuildingCreate, db: Session = Depends(get_db)):
+async def manual_entry(
+    data: BuildingCreate,
+    overwrite: bool = Query(False),
+    db: Session = Depends(get_db),
+):
     """
     Create a building via manual data entry.
 
@@ -91,6 +95,7 @@ async def manual_entry(data: BuildingCreate, db: Session = Depends(get_db)):
             db=db,
             building_data=building_data,
             data_source="manual",
+            overwrite=overwrite,
         )
 
         return {

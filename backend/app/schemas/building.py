@@ -1,7 +1,7 @@
 """
 Building-related Pydantic schemas.
 
-Request and response schemas for building, floor, and related endpoints.
+Request and response schemas for building, floor, and property endpoints.
 """
 
 from datetime import datetime
@@ -20,11 +20,13 @@ class FloorBase(BaseModel):
 
 class FloorCreate(FloorBase):
     floor_id: Optional[str] = None  # Auto-generated if not provided
+    geometry_source: Optional[str] = None
 
 class FloorOut(FloorBase):
     id: UUID
     floor_id: str
     elevation_source: Optional[str] = None
+    geometry_source: Optional[str] = None
     created_at: Optional[datetime] = None
 
     model_config = {"from_attributes": True}
@@ -34,6 +36,7 @@ class FloorOut(FloorBase):
 
 class PropertyBase(BaseModel):
     unit_id: Optional[str] = None
+    sub_ulpin: Optional[str] = None
     property_type: Optional[str] = None  # commercial / residential / mixed
     area: Optional[float] = None
     z_min: Optional[float] = None
@@ -44,17 +47,20 @@ class PropertyCreate(PropertyBase):
     property_id: Optional[str] = None  # Auto-generated if not provided
     floor_number: int  # Used to link to the correct floor
     geometry_geojson: Optional[dict] = None  # Optional GeoJSON polygon
+    geometry_source: Optional[str] = None
 
 class PropertyOut(PropertyBase):
     id: UUID
     property_id: str
     ulpin: str
+    sub_ulpin: Optional[str] = None
     building_id: str = Field(default="", description="Human-readable building_id")
     floor_id: str = Field(default="", description="Human-readable floor_id")
     floor_number: Optional[int] = None
     data_source: str
     geometry_source: Optional[str] = None
     geometry_available: bool = False
+    geometry_geojson: Optional[dict] = None
     verification_status: str
     created_at: Optional[datetime] = None
 
@@ -78,12 +84,14 @@ class RoROut(BaseModel):
 
 class BuildingBase(BaseModel):
     building_id: Optional[str] = None
+    ulpin: Optional[str] = None
     name: Optional[str] = None
     parcel_id: str
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     height: Optional[float] = None
     num_floors: Optional[int] = None
+    geometry_source: Optional[str] = None
 
 class BuildingCreate(BuildingBase):
     """Used for manual building creation."""
@@ -95,11 +103,16 @@ class BuildingSummary(BaseModel):
     """Lightweight building info for list endpoints."""
     id: UUID
     building_id: str
+    ulpin: Optional[str] = None
     name: Optional[str] = None
     parcel_id: str
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    height: Optional[float] = None
     num_floors: Optional[int] = None
     property_count: int = 0
     source: str
+    geometry_source: Optional[str] = None
     created_at: Optional[datetime] = None
 
     model_config = {"from_attributes": True}
@@ -108,6 +121,7 @@ class BuildingDetail(BaseModel):
     """Full building details with floors and properties."""
     id: UUID
     building_id: str
+    ulpin: Optional[str] = None
     name: Optional[str] = None
     parcel_id: str
     latitude: Optional[float] = None
@@ -115,7 +129,9 @@ class BuildingDetail(BaseModel):
     height: Optional[float] = None
     num_floors: Optional[int] = None
     ground_elevation: float = 0.0
+    footprint_geojson: Optional[dict] = None
     source: str
+    geometry_source: Optional[str] = None
     created_at: Optional[datetime] = None
     floors: List[FloorOut] = []
     properties: List[PropertyOut] = []

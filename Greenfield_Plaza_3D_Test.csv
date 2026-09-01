@@ -1,0 +1,16 @@
+building_id,building_name,parcel_id,latitude,longitude,height,floor_number,unit_id,property_type,area,ror_id,owner,land_use,rights
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,1,SHOP-101,commercial,40.0,ROR-201,Anil Gupta,Commercial,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,1,SHOP-102,commercial,50.0,ROR-202,Sunil Verma,Commercial,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,1,SHOP-103,commercial,60.0,ROR-203,Rajesh Kumar,Commercial,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,2,SHOP-201,commercial,45.0,ROR-204,Pooja Sharma,Commercial,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,2,SHOP-202,commercial,55.0,ROR-205,Karan Singh,Commercial,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,2,SHOP-203,commercial,65.0,ROR-206,Neha Patel,Commercial,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,3,APT-301,residential,75.0,ROR-207,Rohan Joshi,Residential,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,3,APT-302,residential,85.0,ROR-208,Sanjay Agarwal,Residential,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,3,APT-303,residential,110.0,ROR-209,Deepak Malhotra,Residential,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,4,APT-401,residential,90.0,ROR-210,Kavita Shah,Residential,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,4,APT-402,residential,120.0,ROR-211,Manish Rao,Residential,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,5,OFF-501,commercial,100.0,ROR-212,Apex Infotech,Commercial,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,5,OFF-502,commercial,110.0,ROR-213,Zenith Logistics,Commercial,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,6,APT-601,residential,95.0,ROR-214,Tarun Kapoor,Residential,Freehold
+B-TEST-03,Greenfield Plaza,P-GREENFIELD,28.6250,77.2200,18.0,6,APT-602,residential,105.0,ROR-215,Vandana Nair,Residential,Freehold

@@ -11,7 +11,7 @@ Endpoints:
 import os
 import uuid
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -132,20 +132,24 @@ async def update_review_data(
 
 
 @router.post("/{dataset_id}/confirm")
-async def confirm_and_process(dataset_id: str, db: Session = Depends(get_db)):
+async def confirm_and_process(
+    dataset_id: str,
+    overwrite: bool = Query(False),
+    db: Session = Depends(get_db),
+):
     """
     Confirm extracted data and trigger processing.
 
     This is a TRANSACTIONAL operation:
     - Creates building, floors, properties, ULPINs, RoR links
     - All commit together or all roll back
-    - No partial buildings in the database
+    - Supports atomic overwrite if overwrite=True
     """
     dataset = db.query(Dataset).filter(Dataset.dataset_id == dataset_id).first()
     if not dataset:
         raise HTTPException(status_code=404, detail=f"Dataset '{dataset_id}' not found")
 
-    if dataset.processing_status not in ("review", "uploaded"):
+    if dataset.processing_status not in ("review", "uploaded", "error"):
         raise HTTPException(
             status_code=400,
             detail=f"Dataset already in '{dataset.processing_status}' state.",
@@ -171,6 +175,7 @@ async def confirm_and_process(dataset_id: str, db: Session = Depends(get_db)):
             db=db,
             building_data=extracted,
             data_source="uploaded_document",
+            overwrite=overwrite,
         )
 
         # Update job and dataset status

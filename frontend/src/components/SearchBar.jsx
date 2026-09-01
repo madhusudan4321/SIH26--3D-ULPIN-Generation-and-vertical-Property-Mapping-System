@@ -1,11 +1,9 @@
 /**
  * SearchBar Component
  *
- * Functional search across ULPINs, parcel IDs, and building IDs.
+ * Searches the FastAPI backend via GET /api/search.
  * On selection: flies camera to entity, selects property, opens panel.
- *
- * Search is debounced (250ms) to avoid excessive calls.
- * In M2+ this prevents hammering the FastAPI backend on every keystroke.
+ * Search is debounced (250ms).
  */
 
 import { useState, useRef, useEffect } from "react";
@@ -18,13 +16,13 @@ export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [searchError, setSearchError] = useState(null);
   const dropdownRef = useRef(null);
   const debounceRef = useRef(null);
-  const { flyTo, selectProperty } = useSelection();
+  const { flyTo, selectProperty, flyToBuilding, selectBuilding } = useSelection();
 
   // Debounced search on input change
   useEffect(() => {
-    // Clear any pending debounce timer
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
@@ -32,13 +30,21 @@ export default function SearchBar() {
     if (query.trim().length === 0) {
       setResults([]);
       setShowDropdown(false);
+      setSearchError(null);
       return;
     }
 
     debounceRef.current = setTimeout(async () => {
-      const res = await search(query);
-      setResults(res);
-      setShowDropdown(res.length > 0);
+      try {
+        setSearchError(null);
+        const res = await search(query);
+        setResults(res);
+        setShowDropdown(res.length > 0);
+      } catch (e) {
+        setSearchError("Search unavailable");
+        setResults([]);
+        setShowDropdown(false);
+      }
     }, DEBOUNCE_MS);
 
     return () => {
@@ -61,15 +67,22 @@ export default function SearchBar() {
 
   const handleSelect = (result) => {
     setShowDropdown(false);
-    setQuery(result.label);
+    setQuery(result.label || result.building_id || result.ulpin);
 
     if (result.type === "property") {
-      flyTo(result.data.three_d_ulpin);
-    } else if (result.type === "parcel" || result.type === "building") {
-      // For parcels/buildings, select the first property associated
-      // In M2+, this would query the API for properties by parcel/building
-      flyTo(null);
-      selectProperty(null);
+      const ulpin = result.ulpin || result.data?.ulpin || result.id;
+      flyTo(ulpin);
+      selectProperty(ulpin);
+    } else if (result.type === "building") {
+      const buildingId = result.building_id || result.id;
+      flyToBuilding(buildingId, {
+        latitude: result.latitude,
+        longitude: result.longitude,
+        height: result.height,
+      });
+      selectBuilding(buildingId);
+    } else if (result.type === "parcel") {
+      setQuery(result.data?.parcel_id || result.label);
     }
   };
 
@@ -97,6 +110,10 @@ export default function SearchBar() {
           className="search-input"
         />
       </div>
+
+      {searchError && (
+        <div className="search-error">{searchError}</div>
+      )}
 
       {showDropdown && (
         <div className="search-dropdown">
