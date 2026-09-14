@@ -66,9 +66,17 @@ export function createFloorEntities(viewer, floors, properties, buildings) {
     const propertyType = property.property_type || "";
     const color = getUnitColor(floorNumber, unitIndex, propertyType, 0.75);
 
+    // Ground elevation offset — convert absolute z values to relative-to-ground
+    const groundElev = building?.ground_elevation || 0.0;
+
     // Elevation steps relative to ground level
-    const zMin = property.z_min != null ? property.z_min : (floorNumber - 1) * 3.0;
-    const zMax = property.z_max != null ? property.z_max : floorNumber * 3.0;
+    const zMinRaw = property.z_min != null ? property.z_min : (floorNumber - 1) * 3.0;
+    const zMaxRaw = property.z_max != null ? property.z_max : floorNumber * 3.0;
+    // If z_min/z_max are absolute elevations, subtract ground_elevation to get
+    // relative-to-ground offsets that Cesium RELATIVE_TO_GROUND expects
+    const zMin = zMinRaw;
+    const zMax = zMaxRaw;
+    const heightOffset = groundElev; // offset applied to make heights relative
 
     const unitId = property.unit_id || property.unit_number || "Unit";
     const subUlpin = property.sub_ulpin || `SUB-ULPIN-${property.building_id}-${unitId}`;
@@ -82,8 +90,8 @@ export function createFloorEntities(viewer, floors, properties, buildings) {
         outline: true,
         outlineColor: Cesium.Color.WHITE.withAlpha(0.85),
         outlineWidth: 2,
-        height: zMin,
-        extrudedHeight: zMax,
+        height: zMin + heightOffset,
+        extrudedHeight: zMax + heightOffset,
         heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
         extrudedHeightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
       },

@@ -64,7 +64,7 @@ export default function CesiumViewer({ useDemoData = false }) {
   // ─── Load Entities ──────────────────────────────────────
 
   const loadEntities = useCallback(async (viewer) => {
-    if (!viewer || viewer.isDestroyed()) return;
+    if (!viewer || viewer.isDestroyed()) return [];
 
     let parcels = [];
     let buildings = [];
@@ -82,13 +82,13 @@ export default function CesiumViewer({ useDemoData = false }) {
     } else {
       try {
         const bSummaries = await getBuildings();
-        if (!viewer || viewer.isDestroyed()) return;
+        if (!viewer || viewer.isDestroyed()) return [];
 
         if (bSummaries && bSummaries.length > 0) {
           const bDetails = await Promise.all(
             bSummaries.map((s) => getBuilding(s.building_id).catch(() => null))
           );
-          if (!viewer || viewer.isDestroyed()) return;
+          if (!viewer || viewer.isDestroyed()) return [];
 
           for (const bDetail of bDetails) {
             if (bDetail) {
@@ -100,10 +100,10 @@ export default function CesiumViewer({ useDemoData = false }) {
         }
 
         parcels = await getParcels().catch(() => []);
-        if (!viewer || viewer.isDestroyed()) return;
+        if (!viewer || viewer.isDestroyed()) return [];
 
         underground = await getUndergroundAssets().catch(() => []);
-        if (!viewer || viewer.isDestroyed()) return;
+        if (!viewer || viewer.isDestroyed()) return [];
 
         // If no DB buildings exist yet, show demo data
         if (buildings.length === 0) {
@@ -113,7 +113,7 @@ export default function CesiumViewer({ useDemoData = false }) {
           properties = demo.properties;
         }
       } catch (e) {
-        if (!viewer || viewer.isDestroyed()) return;
+        if (!viewer || viewer.isDestroyed()) return [];
         console.warn("API load failed, using fallback demo data:", e);
         const demo = loadDemoData();
         buildings = demo.buildings;
@@ -124,7 +124,7 @@ export default function CesiumViewer({ useDemoData = false }) {
       }
     }
 
-    if (!viewer || viewer.isDestroyed()) return;
+    if (!viewer || viewer.isDestroyed()) return [];
 
     buildingsDataRef.current = buildings;
     floorsDataRef.current = floors;
@@ -143,6 +143,8 @@ export default function CesiumViewer({ useDemoData = false }) {
     });
 
     setUndergroundVisibility(entitiesRef.current.underground, false);
+
+    return buildings;
   }, [useDemoData]);
 
   // ─── Initialize Viewer ──────────────────────────────────
@@ -167,6 +169,7 @@ export default function CesiumViewer({ useDemoData = false }) {
       vrButton: false,
       selectionIndicator: true,
       infoBox: false,
+      requestRenderMode: false,
       creditContainer: document.createElement("div"),
       contextOptions: {
         webgl: {
@@ -226,18 +229,8 @@ export default function CesiumViewer({ useDemoData = false }) {
     viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.scene.skyAtmosphere.show = true;
 
-    // Configure real Google Maps Platform basemap provider (Roadmap / Satellite)
-    setupBaseMap(viewer, { mode: basemapMode });
-
-    // Extension hook for future Google Photorealistic 3D Tiles (disabled per milestone specs)
-    togglePhotorealistic3DTiles(viewer, false);
-
-    viewerRef.current = viewer;
-
-    loadEntities(viewer);
-
-    // Initial camera view focused on target region
-    viewer.camera.flyTo({
+    // Set initial camera view directly without startup animation
+    viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(
         SAMPLE_CENTER.lon - 0.001,
         SAMPLE_CENTER.lat - 0.001,
@@ -248,7 +241,61 @@ export default function CesiumViewer({ useDemoData = false }) {
         pitch: Cesium.Math.toRadians(-30),
         roll: 0,
       },
-      duration: 2.0,
+    });
+
+    // Configure real Google Maps Platform basemap provider (Roadmap / Satellite)
+    setupBaseMap(viewer, { mode: basemapMode });
+
+    // Extension hook for future Google Photorealistic 3D Tiles (disabled per milestone specs)
+    togglePhotorealistic3DTiles(viewer, false);
+
+    viewerRef.current = viewer;
+
+    loadEntities(viewer).then((buildings) => {
+      if (!viewer || viewer.isDestroyed()) return;
+
+      const geoBuildings = (buildings || []).filter(
+        (b) => b.latitude != null && b.longitude != null
+      );
+
+      let flyLon = SAMPLE_CENTER.lon;
+      let flyLat = SAMPLE_CENTER.lat;
+      let flyHeight = 350;
+
+      if (geoBuildings.length > 0) {
+        let sumLon = 0, sumLat = 0, maxH = 0;
+        for (const b of geoBuildings) {
+          sumLon += b.longitude;
+          sumLat += b.latitude;
+          maxH = Math.max(maxH, b.height || 18);
+        }
+        flyLon = sumLon / geoBuildings.length;
+        flyLat = sumLat / geoBuildings.length;
+
+        let maxDist = 0;
+        for (const b of geoBuildings) {
+          const dLon = b.longitude - flyLon;
+          const dLat = b.latitude - flyLat;
+          maxDist = Math.max(maxDist, Math.sqrt(dLon * dLon + dLat * dLat));
+        }
+        const spreadMeters = maxDist * 111000;
+        flyHeight = Math.max(80, Math.min(500, spreadMeters * 3 + maxH * 2));
+      }
+
+      // Position camera directly to building centroid without intro animation
+      viewer.camera.setView({
+        destination: Cesium.Cartesian3.fromDegrees(
+          flyLon - 0.001,
+          flyLat - 0.001,
+          flyHeight
+        ),
+        orientation: {
+          heading: Cesium.Math.toRadians(30),
+          pitch: Cesium.Math.toRadians(-30),
+          roll: 0,
+        },
+      });
+      viewer.scene.requestRender();
     });
 
     // Click handler — resolves unit entity (floor:*), footprint polygon (footprint:*), or building entity (building:*)
