@@ -21,6 +21,8 @@ import DocumentUpload from "../components/DocumentUpload";
 import DataReview from "../components/DataReview";
 import ManualEntryForm from "../components/ManualEntryForm";
 import ProcessingStatus from "../components/ProcessingStatus";
+import AlignmentOverlay from "../components/AlignmentOverlay";
+import LocalLidarViewer from "../components/LocalLidarViewer";
 import { checkHealth, loadDemoData } from "../services/api";
 
 export default function Dashboard() {
@@ -102,16 +104,21 @@ export default function Dashboard() {
         <Sidebar
           onAddBuilding={handleAddBuilding}
           onImportDocument={handleImportDocument}
+          onOpenLidarViewer={() => setActiveModal("lidar")}
           backendStatus={backendStatus === "connected" ? "connected" : "disconnected"}
           refreshKey={refreshKey}
         />
         <main className="dashboard-main">
           <CesiumViewer key={refreshKey} useDemoData={useDemoData} />
+          <AlignmentOverlay />
         </main>
         <PropertyPanel onDeleteBuildingSuccess={() => setRefreshKey((k) => k + 1)} />
       </div>
 
       {/* Modals */}
+      {activeModal === "lidar" && (
+        <LocalLidarViewer onClose={() => setActiveModal(null)} />
+      )}
       {activeModal === "addBuilding" && (
         <AddBuildingModal
           onClose={() => setActiveModal(null)}

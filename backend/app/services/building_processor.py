@@ -110,7 +110,30 @@ def process_building(
         footprint_shape = shape(footprint_geojson)
         footprint_wkt = f"SRID=4326;{footprint_shape.wkt}"
 
+        ref_footprint_geojson = bld_info.get("reference_footprint")
+        ref_footprint_wkt = f"SRID=4326;{shape(ref_footprint_geojson).wkt}" if ref_footprint_geojson else None
+
         b_geom_source = bld_info.get("geometry_source", "synthetic_subdivision")
+        ground_elev = float(bld_info.get("ground_elevation", 0.0))
+        ref_elev = float(bld_info.get("reference_elevation", ground_elev))
+        elev_src = bld_info.get("elevation_source", "manual")
+
+        # Alignment Diagnostics & Footprint Anchor Point Calculation
+        from app.services.geometry_engine import compute_alignment_diagnostics
+        diag = compute_alignment_diagnostics(
+            model_footprint_geojson=footprint_geojson,
+            reference_footprint_geojson=ref_footprint_geojson,
+            ground_elevation=ground_elev,
+            reference_elevation=ref_elev,
+            geometry_source=b_geom_source,
+            latitude=lat,
+            longitude=lon,
+        )
+
+        anchor_lat = diag.get("model_anchor_lat", lat)
+        anchor_lon = diag.get("model_anchor_lon", lon)
+        align_status = diag.get("alignment_status", "UNVERIFIED")
+        align_err = diag.get("horizontal_offset_m", 0.0)
 
         # Create Building record
         building = Building(
@@ -122,8 +145,16 @@ def process_building(
             longitude=lon,
             height=calc_height,
             num_floors=bld_info.get("num_floors") or len(floors_data),
-            ground_elevation=bld_info.get("ground_elevation", 0.0),
+            ground_elevation=ground_elev,
+            reference_elevation=ref_elev,
+            elevation_source=elev_src,
+            heading=float(bld_info.get("heading", 0.0)),
+            model_anchor_lat=anchor_lat,
+            model_anchor_lon=anchor_lon,
+            alignment_status=align_status,
+            alignment_error_m=align_err,
             footprint=footprint_wkt,
+            reference_footprint=ref_footprint_wkt,
             source=data_source,
             geometry_source=b_geom_source,
         )
@@ -195,7 +226,7 @@ def process_building(
             else:
                 # Subdivide footprint deterministically for all units on this floor
                 unit_geoms = subdivide_footprint_by_area(footprint_geojson, floor_properties)
-                default_geom_source = "synthetic_subdivision"
+                default_geom_source = b_geom_source if b_geom_source in ("osm_footprint", "cadastral", "geojson") else "synthetic_subdivision"
 
             # Create individual 3D properties with geometries
             for idx, prop_data in enumerate(floor_properties):

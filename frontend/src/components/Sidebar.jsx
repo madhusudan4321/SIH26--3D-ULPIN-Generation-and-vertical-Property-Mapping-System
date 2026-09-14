@@ -10,7 +10,7 @@ import LayerControl from "./LayerControl";
 import { getBuildings } from "../services/api";
 import { useSelection } from "../hooks/useSelection";
 
-export default function Sidebar({ onAddBuilding, onImportDocument, backendStatus, refreshKey }) {
+export default function Sidebar({ onAddBuilding, onImportDocument, onOpenLidarViewer, backendStatus, refreshKey }) {
   const [buildings, setBuildings] = useState([]);
   const [loadingBuildings, setLoadingBuildings] = useState(false);
   const { selectedBuildingId, flyToBuilding, selectBuilding } = useSelection();
@@ -116,8 +116,12 @@ export default function Sidebar({ onAddBuilding, onImportDocument, backendStatus
           >
             📄 Import Document
           </button>
-          <button className="sidebar-btn" disabled title="Planned for future phase">
-            📡 Process LiDAR
+          <button
+            className="sidebar-btn sidebar-btn-active"
+            onClick={onOpenLidarViewer}
+            title="Inspect Aam Khas Bagh E57 LiDAR point cloud in local coordinate frame"
+          >
+            📡 Local LiDAR Viewer
           </button>
           <button className="sidebar-btn" disabled title="Planned for future phase">
             📷 Drone Photogrammetry

@@ -403,11 +403,32 @@ def parse_geojson(file_content: bytes) -> dict:
         props = feature.get("properties", {})
         geom = feature.get("geometry")
 
-        # Try to extract building info from first feature
+        # Check if feature represents overall building footprint or building metadata
+        is_bldg_feature = (
+            props.get("type") in ("building", "footprint") or
+            props.get("building") is not None or
+            props.get("amenity") in ("museum", "university", "library") or
+            props.get("building_id") is not None or
+            props.get("bldg_id") is not None
+        )
+
         if not building["building_id"]:
-            building["building_id"] = props.get("building_id") or props.get("bldg_id")
-            building["name"] = props.get("building_name") or props.get("name")
-            building["parcel_id"] = props.get("parcel_id")
+            building["building_id"] = props.get("building_id") or props.get("bldg_id") or props.get("id") or "REAL-UBC-BEATY-001"
+            building["name"] = props.get("building_name") or props.get("name") or "Beaty Biodiversity Museum"
+            building["parcel_id"] = props.get("parcel_id") or "P-UBC-VANCOUVER"
+
+        if is_bldg_feature and geom and not building.get("footprint"):
+            building["footprint"] = geom
+            building["reference_footprint"] = geom
+            building["geometry_source"] = props.get("geometry_source") or "osm_footprint"
+            try:
+                from shapely.geometry import shape
+                sh = shape(geom)
+                if sh.is_valid and not sh.is_empty:
+                    building["latitude"] = round(sh.centroid.y, 7)
+                    building["longitude"] = round(sh.centroid.x, 7)
+            except Exception:
+                pass
 
         floor_num = props.get("floor") or props.get("floor_number") or 1
         if isinstance(floor_num, str):
@@ -421,28 +442,48 @@ def parse_geojson(file_content: bytes) -> dict:
                 "properties": [],
             }
 
-        prop = {
-            "unit_id": props.get("unit_id") or props.get("shop_id") or props.get("id"),
-            "property_type": (props.get("property_type") or props.get("type") or "").lower() or None,
-            "area": _safe_float(props.get("area")),
-            "ror_id": props.get("ror_id"),
-            "owner": props.get("owner") or props.get("owner_name"),
-            "land_use": props.get("land_use"),
-            "rights": props.get("rights"),
-            "geometry": geom,  # Actual unit geometry from GeoJSON
-        }
-        floor_map[floor_num]["properties"].append(prop)
+        # If feature is a unit/room inside floor
+        if not is_bldg_feature or props.get("unit_id") or props.get("shop_id"):
+            prop = {
+                "unit_id": props.get("unit_id") or props.get("shop_id") or props.get("id"),
+                "property_type": (props.get("property_type") or props.get("type") or "").lower() or "exhibit",
+                "area": _safe_float(props.get("area")),
+                "ror_id": props.get("ror_id"),
+                "owner": props.get("owner") or props.get("owner_name"),
+                "land_use": props.get("land_use"),
+                "rights": props.get("rights"),
+                "geometry": geom,  # Actual unit geometry from GeoJSON
+            }
+            floor_map[floor_num]["properties"].append(prop)
 
-        if prop["ror_id"]:
-            ror_records.append({
-                "ror_id": prop["ror_id"],
-                "owner": prop["owner"],
-                "land_use": prop["land_use"],
-                "rights": prop["rights"],
-            })
+            if prop["ror_id"]:
+                ror_records.append({
+                    "ror_id": prop["ror_id"],
+                    "owner": prop["owner"],
+                    "land_use": prop["land_use"],
+                    "rights": prop["rights"],
+                })
 
     floors = sorted(floor_map.values(), key=lambda f: f["floor_number"])
     building["num_floors"] = len(floors)
+
+    # If no explicit building feature was found, but features exist, use first polygon as footprint
+    if not building.get("footprint") and features:
+        for f in features:
+            g = f.get("geometry")
+            if g and g.get("type") in ("Polygon", "MultiPolygon"):
+                building["footprint"] = g
+                building["reference_footprint"] = g
+                building["geometry_source"] = "osm_footprint"
+                try:
+                    from shapely.geometry import shape
+                    sh = shape(g)
+                    if sh.is_valid and not sh.is_empty:
+                        building["latitude"] = round(sh.centroid.y, 7)
+                        building["longitude"] = round(sh.centroid.x, 7)
+                except Exception:
+                    pass
+                break
 
     return {
         "building": building,

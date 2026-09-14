@@ -82,9 +82,15 @@ export default function CesiumViewer({ useDemoData = false }) {
     } else {
       try {
         const bSummaries = await getBuildings();
+        if (!viewer || viewer.isDestroyed()) return;
+
         if (bSummaries && bSummaries.length > 0) {
-          for (const summary of bSummaries) {
-            const bDetail = await getBuilding(summary.building_id);
+          const bDetails = await Promise.all(
+            bSummaries.map((s) => getBuilding(s.building_id).catch(() => null))
+          );
+          if (!viewer || viewer.isDestroyed()) return;
+
+          for (const bDetail of bDetails) {
             if (bDetail) {
               buildings.push(bDetail);
               if (bDetail.floors) floors.push(...bDetail.floors);
@@ -94,7 +100,10 @@ export default function CesiumViewer({ useDemoData = false }) {
         }
 
         parcels = await getParcels().catch(() => []);
+        if (!viewer || viewer.isDestroyed()) return;
+
         underground = await getUndergroundAssets().catch(() => []);
+        if (!viewer || viewer.isDestroyed()) return;
 
         // If no DB buildings exist yet, show demo data
         if (buildings.length === 0) {
@@ -104,6 +113,7 @@ export default function CesiumViewer({ useDemoData = false }) {
           properties = demo.properties;
         }
       } catch (e) {
+        if (!viewer || viewer.isDestroyed()) return;
         console.warn("API load failed, using fallback demo data:", e);
         const demo = loadDemoData();
         buildings = demo.buildings;
@@ -173,11 +183,28 @@ export default function CesiumViewer({ useDemoData = false }) {
 
     // Save viewer instance on window for console debugging
     window.cesiumViewer = viewer;
+    viewer._currentBasemapMode = basemapMode;
+    viewer._currentBaseImageryLayer = viewer.imageryLayers.get(0);
+
+    // Suppress default red error dialog popups and log full stack
+    if (viewer.cesiumWidget) {
+      viewer.cesiumWidget.showErrorPanel = function (title, message, error) {
+        const errObj = error || {};
+        console.error("Cesium render error panel DETAILED:", {
+          title,
+          message,
+          name: errObj.name,
+          msg: errObj.message,
+          stack: errObj.stack,
+          errObj
+        });
+      };
+    }
 
     // Handle render errors gracefully without crashing viewer
     if (viewer.scene && viewer.scene.renderError) {
       viewer.scene.renderError.addEventListener((scene, error) => {
-        console.warn("Captured Cesium render error:", error);
+        console.error("Captured Cesium render error detail:", error?.name, error?.message, error?.stack, error);
       });
     }
 

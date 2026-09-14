@@ -69,19 +69,24 @@ export function setupBaseMap(viewer, options = {}) {
   const mode = (options.mode || "roadmap").toLowerCase();
   const apiKey = options.apiKey || import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
+  if (viewer._currentBasemapMode === mode && viewer._currentBaseImageryLayer) {
+    return viewer._currentBaseImageryLayer;
+  }
+
   const layers = viewer.imageryLayers;
   const newProvider = createGoogleBasemapProvider(mode, apiKey);
 
   try {
-    // Add new layer FIRST so imageryLayers is NEVER empty (prevents Cesium render crash)
+    // Add new layer FIRST so imageryLayers is NEVER empty
     const newLayer = layers.addImageryProvider(newProvider, 0);
 
-    // Safely remove previous imagery layers
+    // Safely remove previous imagery layers without immediate destructive teardown
     for (let i = layers.length - 1; i >= 0; i--) {
       const l = layers.get(i);
-      if (l !== newLayer) {
+      if (l && l !== newLayer) {
         try {
-          layers.remove(l, true);
+          l.show = false;
+          layers.remove(l, false);
         } catch {}
       }
     }

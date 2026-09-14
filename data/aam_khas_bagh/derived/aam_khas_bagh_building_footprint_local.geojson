@@ -1,0 +1,76 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "coordinate_system": "AAM_KHAS_BAGH_LOCAL",
+    "crs": null,
+    "geometry_source": "lidar_extracted",
+    "georeferenced": false,
+    "status": "LOCAL COORDINATE FRAME \u2014 NOT GEOREFERENCED"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "building_id": "AAM_KHAS_BAGH_HAMMAM_01",
+        "geometry_source": "lidar_extracted",
+        "confidence": 0.92,
+        "area_m2": 677.38,
+        "perimeter_m": 106.07,
+        "height_m": 6.01,
+        "ground_z": -1.926,
+        "roof_z": 4.081
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              4.365,
+              9.042
+            ],
+            [
+              -5.055,
+              -28.016
+            ],
+            [
+              -4.178,
+              -29.105
+            ],
+            [
+              6.247,
+              -31.373
+            ],
+            [
+              13.148,
+              -26.345
+            ],
+            [
+              22.972,
+              -14.385
+            ],
+            [
+              20.121,
+              -6.389
+            ],
+            [
+              16.755,
+              -0.572
+            ],
+            [
+              10.081,
+              6.714
+            ],
+            [
+              5.695,
+              9.564
+            ],
+            [
+              4.365,
+              9.042
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

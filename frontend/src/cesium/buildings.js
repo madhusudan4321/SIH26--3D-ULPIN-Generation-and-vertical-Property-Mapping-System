@@ -1,7 +1,8 @@
 /**
  * Building Entity Module
  *
- * Creates Cesium 3D building envelope entities and PostGIS footprint highlight polygons.
+ * Creates Cesium 3D building envelope entities, PostGIS source model footprint polygons,
+ * authoritative reference footprint polygons, and local ENU centroid anchor points.
  * Positioned using WGS84 geographic coordinates and relative ground heights.
  */
 
@@ -9,11 +10,11 @@ import * as Cesium from "cesium";
 import { BUILDING_OUTLINE_COLOR, polygonToCartesian } from "./utils";
 
 /**
- * Create building 3D volume and PostGIS ground footprint entities on the viewer.
+ * Create building 3D volume, PostGIS model footprint, reference footprint, and anchor point entities on the viewer.
  *
  * @param {Cesium.Viewer} viewer
  * @param {Array} buildings - Array of building records from API or sample data
- * @returns {Array<Cesium.Entity>} Created entities (envelope + ground footprint)
+ * @returns {Array<Cesium.Entity>} Created entities
  */
 export function createBuildingEntities(viewer, buildings) {
   const entities = [];
@@ -26,12 +27,40 @@ export function createBuildingEntities(viewer, buildings) {
     if (!positions || positions.length < 3) continue;
 
     const groundElev = building.ground_elevation || 0.0;
+    const refElev = building.reference_elevation || groundElev;
     const height = building.height || building.roof_elevation || 18.0;
 
-    // 1. PostGIS Ground Footprint Polygon Highlight Entity
+    // 1. Authoritative Reference Footprint Entity (if available)
+    const refGeom = building.reference_footprint_geojson || building.reference_footprint;
+    if (refGeom) {
+      const refPositions = polygonToCartesian(refGeom);
+      if (refPositions && refPositions.length >= 3) {
+        const refEntity = viewer.entities.add({
+          id: `ref_footprint:${building.building_id}`,
+          name: `Reference Footprint ${building.name || building.building_id}`,
+          polygon: {
+            hierarchy: new Cesium.PolygonHierarchy(refPositions),
+            material: Cesium.Color.fromCssColorString("#a855f7").withAlpha(0.20), // Purple highlight for Cadastral Reference
+            outline: true,
+            outlineColor: Cesium.Color.fromCssColorString("#a855f7"),
+            outlineWidth: 3,
+            height: refElev + 0.05,
+            heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
+          },
+          properties: {
+            entityType: "ref_footprint",
+            building_id: building.building_id,
+            name: building.name,
+          },
+        });
+        entities.push(refEntity);
+      }
+    }
+
+    // 2. PostGIS Source Model Ground Footprint Polygon Highlight Entity
     const footprintEntity = viewer.entities.add({
       id: `footprint:${building.building_id}`,
-      name: `Footprint ${building.name || building.building_id}`,
+      name: `Model Footprint ${building.name || building.building_id}`,
       polygon: {
         hierarchy: new Cesium.PolygonHierarchy(positions),
         material: Cesium.Color.fromCssColorString("#38bdf8").withAlpha(0.15),
@@ -48,7 +77,30 @@ export function createBuildingEntities(viewer, buildings) {
       },
     });
 
-    // 2. 3D Building Envelope Volume Entity
+    // 3. Local ENU Centroid Anchor Point Entity
+    const anchorLat = building.model_anchor_lat || building.latitude;
+    const anchorLon = building.model_anchor_lon || building.longitude;
+    if (anchorLat != null && anchorLon != null) {
+      const anchorEntity = viewer.entities.add({
+        id: `anchor:${building.building_id}`,
+        name: `Anchor (${building.building_id})`,
+        position: Cesium.Cartesian3.fromDegrees(anchorLon, anchorLat, groundElev + 0.3),
+        point: {
+          pixelSize: 8,
+          color: Cesium.Color.RED,
+          outlineColor: Cesium.Color.WHITE,
+          outlineWidth: 2,
+          heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
+        },
+        properties: {
+          entityType: "anchor",
+          building_id: building.building_id,
+        },
+      });
+      entities.push(anchorEntity);
+    }
+
+    // 4. 3D Building Envelope Volume Entity
     const envelopeEntity = viewer.entities.add({
       id: `building:${building.building_id}`,
       name: `Building ${building.name || building.building_id}`,

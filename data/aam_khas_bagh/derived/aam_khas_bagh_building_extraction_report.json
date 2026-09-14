@@ -1,0 +1,29 @@
+{
+  "dataset": "7csx-ne47_terresterial_lidar.e57",
+  "downsampling_method": "voxel_grid_0.10m",
+  "ground_classification_method": "progressive_local_elevation_grid",
+  "ground_points": 16414,
+  "non_ground_points": 14645,
+  "building_candidates_count": 3,
+  "selected_building_candidate": 3,
+  "candidate_dimensions": {
+    "width_m": 28.03,
+    "length_m": 40.94,
+    "height_m": 6.01
+  },
+  "extracted_footprint_method": "concave_convex_hull_2d_planar_projection",
+  "extracted_footprint_area_m2": 677.38,
+  "estimated_building_height_m": 6.01,
+  "elevation": {
+    "ground_z": -1.926,
+    "roof_z": 4.081,
+    "height_m": 6.01,
+    "min_z": -1.916,
+    "max_z": 5.449
+  },
+  "confidence_score": 0.92,
+  "hammam_building_isolated": true,
+  "geometry_coordinate_system": "AAM_KHAS_BAGH_LOCAL",
+  "georeferenced": false,
+  "confirmation": "NO GEOGRAPHIC TRANSFORMATION HAS BEEN APPLIED."
+}

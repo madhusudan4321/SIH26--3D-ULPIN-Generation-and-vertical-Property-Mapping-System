@@ -36,6 +36,8 @@ npm-debug.log*
 
 # Data (large files)
 data/processed/
+data/aam_khas_bagh/lidar/
 *.tif
 *.laz
 *.las
+*.e57

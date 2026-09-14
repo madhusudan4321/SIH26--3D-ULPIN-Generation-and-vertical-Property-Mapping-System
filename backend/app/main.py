@@ -25,7 +25,7 @@ from app.models import (  # noqa: F401
 )
 
 # Import routers
-from app.routers import health, buildings, properties, upload, manual_entry
+from app.routers import health, buildings, properties, upload, manual_entry, lidar
 
 
 @asynccontextmanager
@@ -49,6 +49,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+from fastapi.middleware.gzip import GZipMiddleware
+
 # CORS — allow frontend dev server
 app.add_middleware(
     CORSMiddleware,
@@ -62,9 +64,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# GZip compression for fast JSON transmission of 3D point cloud assets
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
 # Register routers
 app.include_router(health.router)
 app.include_router(buildings.router)
 app.include_router(properties.router)
 app.include_router(upload.router)
 app.include_router(manual_entry.router)
+app.include_router(lidar.router)

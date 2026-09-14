@@ -2,7 +2,8 @@
  * Cesium Utilities — Colors, CRS Config, Helpers
  *
  * CRS Configuration:
- * M1: All sample data uses EPSG:4326 (WGS84 lon/lat).
+ * All spatial data uses EPSG:4326 (WGS84 lon/lat).
+ * GeoJSON coordinate order: [longitude, latitude]
  */
 
 import * as Cesium from "cesium";
@@ -13,15 +14,13 @@ export const SAMPLE_DATA_CRS = "EPSG:4326";
 
 // ─── Camera Target ──────────────────────────────────────────
 
-// Center of sample parcel area (India Gate vicinity, New Delhi)
 export const SAMPLE_CENTER = {
-  lon: 77.23,
-  lat: 28.6134,
+  lon: -123.2509,
+  lat: 49.2632,
 };
 
 // ─── Color Palette ──────────────────────────────────────────
 
-// Floor colors — distinct per floor number for visual separation
 export const FLOOR_COLORS = [
   Cesium.Color.fromCssColorString("#10b981"), // Floor 1 — Emerald
   Cesium.Color.fromCssColorString("#06b6d4"), // Floor 2 — Cyan
@@ -31,38 +30,27 @@ export const FLOOR_COLORS = [
   Cesium.Color.fromCssColorString("#f59e0b"), // Floor 6 — Amber
 ];
 
-export const PARCEL_COLOR = Cesium.Color.fromCssColorString("#f59e0b").withAlpha(0.25); // Amber
-export const PARCEL_OUTLINE_COLOR = Cesium.Color.fromCssColorString("#f59e0b"); // Amber
-export const BUILDING_COLOR = Cesium.Color.fromCssColorString("#94a3b8").withAlpha(0.15); // Slate
+export const PARCEL_COLOR = Cesium.Color.fromCssColorString("#f59e0b").withAlpha(0.25);
+export const PARCEL_OUTLINE_COLOR = Cesium.Color.fromCssColorString("#f59e0b");
+export const BUILDING_COLOR = Cesium.Color.fromCssColorString("#94a3b8").withAlpha(0.15);
 export const BUILDING_OUTLINE_COLOR = Cesium.Color.fromCssColorString("#cbd5e1").withAlpha(0.6);
-export const SELECTION_COLOR = Cesium.Color.fromCssColorString("#facc15").withAlpha(0.85); // Yellow highlight
+export const SELECTION_COLOR = Cesium.Color.fromCssColorString("#facc15").withAlpha(0.85);
 export const UNDERGROUND_COLORS = {
-  water_pipeline: Cesium.Color.fromCssColorString("#3b82f6"), // Blue
-  sewer: Cesium.Color.fromCssColorString("#a855f7"),          // Purple
-  electricity_cable: Cesium.Color.fromCssColorString("#ef4444"), // Red
+  water_pipeline: Cesium.Color.fromCssColorString("#3b82f6"),
+  sewer: Cesium.Color.fromCssColorString("#a855f7"),
+  electricity_cable: Cesium.Color.fromCssColorString("#ef4444"),
 };
 
 // ─── Helpers ────────────────────────────────────────────────
 
-/**
- * Get floor color by floor number (1-indexed).
- */
 export function getFloorColor(floorNumber, alpha = 0.7) {
   const idx = Math.abs(floorNumber - 1) % FLOOR_COLORS.length;
   return FLOOR_COLORS[idx].withAlpha(alpha);
 }
 
-/**
- * Get distinct unit color for 3D property volume rendering.
- * Uses Cesium.Color.fromHsl(hue, saturation, lightness, alpha) to differentiate
- * adjacent units on the same floor visually.
- */
 export function getUnitColor(floorNumber, unitIndex = 0, propertyType = "", alpha = 0.75) {
-  // Base hues per floor number (0.0 to 1.0)
   const floorHues = [0.42, 0.52, 0.60, 0.75, 0.90, 0.08, 0.15, 0.28];
   const baseHue = floorHues[Math.abs(floorNumber - 1) % floorHues.length];
-
-  // Shift hue slightly by unitIndex to make adjacent units on the same floor visually distinct
   const hue = (baseHue + (unitIndex * 0.07)) % 1.0;
 
   let saturation = 0.75;
@@ -81,24 +69,34 @@ export function getUnitColor(floorNumber, unitIndex = 0, propertyType = "", alph
 }
 
 /**
- * Convert a polygon (array of [lon, lat]) to Cesium Cartesian3 array.
- * Assumes EPSG:4326 input.
+ * Convert a GeoJSON polygon / geometry / coordinate ring to a Cesium Cartesian3 array.
+ * Strictly respects WGS84 GeoJSON coordinate order: [longitude, latitude].
+ * Supports Polygon and MultiPolygon geometry objects.
+ *
+ * @param {Object|Array} geometryOrCoordinates
+ * @returns {Array<Cesium.Cartesian3>} Array of Cesium Cartesian3 positions
  */
 export function polygonToCartesian(geometryOrCoordinates) {
   if (!geometryOrCoordinates) return [];
   let ring = geometryOrCoordinates;
 
-  // Handle GeoJSON geometry dict: { type: "Polygon", coordinates: [[[lon, lat], ...]] }
+  // Handle GeoJSON Geometry or Feature object
   if (typeof geometryOrCoordinates === "object" && !Array.isArray(geometryOrCoordinates)) {
-    if (geometryOrCoordinates.coordinates) {
-      ring = geometryOrCoordinates.coordinates[0] || [];
+    const geom = geometryOrCoordinates.geometry || geometryOrCoordinates;
+    if (geom.type === "Polygon" && Array.isArray(geom.coordinates)) {
+      ring = geom.coordinates[0] || [];
+    } else if (geom.type === "MultiPolygon" && Array.isArray(geom.coordinates)) {
+      // Take exterior ring of first polygon component
+      ring = geom.coordinates[0]?.[0] || [];
+    } else if (geom.coordinates) {
+      ring = geom.coordinates[0] || [];
     } else {
       return [];
     }
   }
 
-  // Handle GeoJSON coordinates: [[[lon, lat], ...]] (nested 3D array)
-  if (Array.isArray(ring) && ring.length > 0 && Array.isArray(ring[0]) && Array.isArray(ring[0][0])) {
+  // Handle nested coordinate rings: [[[lon, lat], ...]]
+  while (Array.isArray(ring) && ring.length > 0 && Array.isArray(ring[0]) && Array.isArray(ring[0][0])) {
     ring = ring[0];
   }
 
@@ -107,9 +105,9 @@ export function polygonToCartesian(geometryOrCoordinates) {
   const positions = [];
   for (const pt of ring) {
     if (Array.isArray(pt) && pt.length >= 2) {
-      const lon = Number(pt[0]);
-      const lat = Number(pt[1]);
-      if (!isNaN(lon) && !isNaN(lat)) {
+      const lon = Number(pt[0]); // Longitude is index 0
+      const lat = Number(pt[1]); // Latitude is index 1
+      if (!isNaN(lon) && !isNaN(lat) && lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90) {
         positions.push(Cesium.Cartesian3.fromDegrees(lon, lat));
       }
     } else if (typeof pt === "string") {
@@ -117,7 +115,7 @@ export function polygonToCartesian(geometryOrCoordinates) {
       if (parts.length >= 2) {
         const lon = Number(parts[0]);
         const lat = Number(parts[1]);
-        if (!isNaN(lon) && !isNaN(lat)) {
+        if (!isNaN(lon) && !isNaN(lat) && lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90) {
           positions.push(Cesium.Cartesian3.fromDegrees(lon, lat));
         }
       }
@@ -126,9 +124,6 @@ export function polygonToCartesian(geometryOrCoordinates) {
   return positions;
 }
 
-/**
- * Get underground asset color by type.
- */
 export function getUndergroundColor(type) {
   return UNDERGROUND_COLORS[type] || Cesium.Color.GRAY;
 }

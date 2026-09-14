@@ -113,6 +113,13 @@ class BuildingSummary(BaseModel):
     property_count: int = 0
     source: str
     geometry_source: Optional[str] = None
+    reference_elevation: float = 0.0
+    elevation_source: str = "manual"
+    heading: float = 0.0
+    model_anchor_lat: Optional[float] = None
+    model_anchor_lon: Optional[float] = None
+    alignment_status: str = "UNVERIFIED"
+    alignment_error_m: float = 0.0
     created_at: Optional[datetime] = None
 
     model_config = {"from_attributes": True}
@@ -129,7 +136,15 @@ class BuildingDetail(BaseModel):
     height: Optional[float] = None
     num_floors: Optional[int] = None
     ground_elevation: float = 0.0
+    reference_elevation: float = 0.0
+    elevation_source: str = "manual"
+    heading: float = 0.0
+    model_anchor_lat: Optional[float] = None
+    model_anchor_lon: Optional[float] = None
+    alignment_status: str = "UNVERIFIED"
+    alignment_error_m: float = 0.0
     footprint_geojson: Optional[dict] = None
+    reference_footprint_geojson: Optional[dict] = None
     source: str
     geometry_source: Optional[str] = None
     created_at: Optional[datetime] = None
@@ -137,6 +152,27 @@ class BuildingDetail(BaseModel):
     properties: List[PropertyOut] = []
 
     model_config = {"from_attributes": True}
+
+
+# ─── Alignment Diagnostic Schema ───────────────────────────
+
+class AlignmentDiagnosticOut(BaseModel):
+    building_id: str
+    alignment_status: str  # PASS / APPROXIMATE / UNVERIFIED / WARN / FAIL
+    diagnostic_message: str
+    geometry_source: str
+    model_anchor_lat: Optional[float] = None
+    model_anchor_lon: Optional[float] = None
+    horizontal_offset_m: float = 0.0
+    reference_footprint_area_sqm: float = 0.0
+    model_footprint_area_sqm: float = 0.0
+    intersection_area_sqm: float = 0.0
+    union_area_sqm: float = 0.0
+    iou: float = 0.0
+    containment_ratio_percent: float = 0.0
+    base_elevation_m: float = 0.0
+    reference_elevation_m: float = 0.0
+    elevation_difference_m: float = 0.0
 
 
 # ─── Property Detail (with RoR) ────────────────────────────

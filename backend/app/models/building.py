@@ -34,11 +34,22 @@ class Building(Base):
     height = Column(Float, nullable=True)
     num_floors = Column(Integer, nullable=True)
     ground_elevation = Column(Float, default=0.0)
+    reference_elevation = Column(Float, default=0.0)
+    elevation_source = Column(String(50), nullable=False, default="manual")  # terrain/lidar/survey/source_geometry/manual/unknown
+    heading = Column(Float, default=0.0)
+    model_anchor_lat = Column(Float, nullable=True)
+    model_anchor_lon = Column(Float, nullable=True)
+    alignment_status = Column(String(50), nullable=False, default="UNVERIFIED")  # PASS / APPROXIMATE / UNVERIFIED / WARN / FAIL
+    alignment_error_m = Column(Float, default=0.0)
     source = Column(String(50), nullable=False, default="manual")
     geometry_source = Column(String(50), nullable=True, default="synthetic_subdivision")
 
     # Building footprint polygon stored in PostGIS
     footprint = Column(
+        Geometry("POLYGON", srid=4326, spatial_index=True), nullable=True
+    )
+    # Authoritative reference footprint (e.g. from Cadastral GIS / Land Records)
+    reference_footprint = Column(
         Geometry("POLYGON", srid=4326, spatial_index=True), nullable=True
     )
 

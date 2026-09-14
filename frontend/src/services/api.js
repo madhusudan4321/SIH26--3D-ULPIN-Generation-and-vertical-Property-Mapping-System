@@ -58,6 +58,10 @@ export async function getBuildingProperties(buildingId) {
   return apiFetch(`/api/buildings/${buildingId}/properties`);
 }
 
+export async function getBuildingAlignment(buildingId) {
+  return apiFetch(`/api/buildings/${buildingId}/alignment`);
+}
+
 // ─── Properties (from PostgreSQL) ───────────────────────────
 
 export async function getProperty(ulpin) {

@@ -87,6 +87,13 @@ async def list_buildings(db: Session = Depends(get_db)):
                 property_count=len(b.properties),
                 source=b.source,
                 geometry_source=b.geometry_source,
+                reference_elevation=b.reference_elevation or 0.0,
+                elevation_source=b.elevation_source or "manual",
+                heading=b.heading or 0.0,
+                model_anchor_lat=b.model_anchor_lat or b.latitude,
+                model_anchor_lon=b.model_anchor_lon or b.longitude,
+                alignment_status=b.alignment_status or "UNVERIFIED",
+                alignment_error_m=b.alignment_error_m or 0.0,
                 created_at=b.created_at,
             )
         )
@@ -136,6 +143,13 @@ async def get_building(building_id: str, db: Session = Depends(get_db)):
         except Exception:
             pass
 
+    ref_footprint_geojson = None
+    if building.reference_footprint is not None:
+        try:
+            ref_footprint_geojson = mapping(to_shape(building.reference_footprint))
+        except Exception:
+            pass
+
     return BuildingDetail(
         id=building.id,
         building_id=building.building_id,
@@ -146,14 +160,78 @@ async def get_building(building_id: str, db: Session = Depends(get_db)):
         longitude=building.longitude,
         height=building.height,
         num_floors=building.num_floors,
-        ground_elevation=building.ground_elevation,
+        ground_elevation=building.ground_elevation or 0.0,
+        reference_elevation=building.reference_elevation or 0.0,
+        elevation_source=building.elevation_source or "manual",
+        heading=building.heading or 0.0,
+        model_anchor_lat=building.model_anchor_lat or building.latitude,
+        model_anchor_lon=building.model_anchor_lon or building.longitude,
+        alignment_status=building.alignment_status or "UNVERIFIED",
+        alignment_error_m=building.alignment_error_m or 0.0,
         footprint_geojson=footprint_geojson,
+        reference_footprint_geojson=ref_footprint_geojson,
         source=building.source,
         geometry_source=building.geometry_source,
         created_at=building.created_at,
         floors=floors_out,
         properties=props_out,
     )
+
+
+@router.get("/{building_id}/alignment")
+async def get_building_alignment(building_id: str, db: Session = Depends(get_db)):
+    """
+    Get comprehensive data-driven alignment diagnostics for a building.
+    Returns IoU, horizontal displacement, containment %, elevation diff, and status.
+    """
+    building = (
+        db.query(Building)
+        .options(
+            joinedload(Building.properties),
+        )
+        .filter(Building.building_id == building_id)
+        .first()
+    )
+
+    if not building:
+        raise HTTPException(status_code=404, detail=f"Building '{building_id}' not found")
+
+    footprint_geojson = None
+    if building.footprint is not None:
+        try:
+            footprint_geojson = mapping(to_shape(building.footprint))
+        except Exception:
+            pass
+
+    ref_footprint_geojson = None
+    if building.reference_footprint is not None:
+        try:
+            ref_footprint_geojson = mapping(to_shape(building.reference_footprint))
+        except Exception:
+            pass
+
+    prop_geoms = []
+    for p in building.properties:
+        if p.geometry is not None:
+            try:
+                prop_geoms.append(mapping(to_shape(p.geometry)))
+            except Exception:
+                pass
+
+    from app.services.geometry_engine import compute_alignment_diagnostics
+    diag = compute_alignment_diagnostics(
+        model_footprint_geojson=footprint_geojson,
+        reference_footprint_geojson=ref_footprint_geojson,
+        property_geoms=prop_geoms,
+        ground_elevation=building.ground_elevation or 0.0,
+        reference_elevation=building.reference_elevation or 0.0,
+        geometry_source=building.geometry_source or "synthetic_subdivision",
+        latitude=building.latitude,
+        longitude=building.longitude,
+    )
+
+    diag["building_id"] = building_id
+    return diag
 
 
 @router.get("/{building_id}/properties", response_model=list[PropertyOut])
