@@ -13,7 +13,7 @@
  * 9. Provide interactive camera view navigation (Top View, 3D/Reset View, Compass N/S/E/W)
  */
 
-import { useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import * as Cesium from "cesium";
 import { useSelection } from "../hooks/useSelection";
 import { getParcels, getBuildings, getBuilding, getUndergroundAssets, loadDemoData } from "../services/api";
@@ -33,6 +33,7 @@ if (ionToken && ionToken !== "your_cesium_ion_token_here") {
 export default function CesiumViewer({ useDemoData = false }) {
   const containerRef = useRef(null);
   const viewerRef = useRef(null);
+  const [webglError, setWebglError] = useState(null);
   const entitiesRef = useRef({
     parcels: [],
     buildings: [],
@@ -135,16 +136,26 @@ export default function CesiumViewer({ useDemoData = false }) {
     setUndergroundVisibility(entitiesRef.current.underground, false);
   }, [useDemoData]);
 
+  const handleRetry = useCallback(() => {
+    setWebglError(null);
+    initRef.current = false;
+  }, []);
+
   // ─── Initialize Viewer ──────────────────────────────────
 
   useEffect(() => {
     if (!containerRef.current || initRef.current) return;
     initRef.current = true;
 
+    // Clean up container DOM before creating a new viewer instance
+    if (containerRef.current) {
+      containerRef.current.innerHTML = "";
+    }
+
     // Guaranteed initial basemap imagery provider (prevents 0-layer crash)
     const initialImageryProvider = createGoogleBasemapProvider(basemapMode);
 
-    const viewer = new Cesium.Viewer(containerRef.current, {
+    const baseViewerOptions = {
       imageryProvider: initialImageryProvider,
       baseLayerPicker: false,
       geocoder: false,
@@ -158,18 +169,57 @@ export default function CesiumViewer({ useDemoData = false }) {
       selectionIndicator: true,
       infoBox: false,
       creditContainer: document.createElement("div"),
-      contextOptions: {
-        webgl: {
-          alpha: false,
-          depth: true,
-          stencil: false,
-          antialias: true,
-          premultipliedAlpha: true,
-          preserveDrawingBuffer: true,
-          failIfMajorPerformanceCaveat: false,
-        },
-      },
-    });
+    };
+
+    let viewer = null;
+    try {
+      // Step 1: Standard WebGL context options (flat attribute map)
+      try {
+        viewer = new Cesium.Viewer(containerRef.current, {
+          ...baseViewerOptions,
+          contextOptions: {
+            alpha: false,
+            depth: true,
+            stencil: false,
+            antialias: true,
+            preserveDrawingBuffer: true,
+            failIfMajorPerformanceCaveat: false,
+          },
+        });
+      } catch (err1) {
+        console.warn("Primary Cesium WebGL initialization failed, trying conservative WebGL options:", err1);
+        // Step 2: Conservative WebGL context options
+        try {
+          viewer = new Cesium.Viewer(containerRef.current, {
+            ...baseViewerOptions,
+            contextOptions: {
+              alpha: false,
+              depth: true,
+              antialias: false,
+              failIfMajorPerformanceCaveat: false,
+            },
+          });
+        } catch (err2) {
+          console.warn("Conservative WebGL options failed, trying default viewer options:", err2);
+          // Step 3: Standard default options
+          viewer = new Cesium.Viewer(containerRef.current, baseViewerOptions);
+        }
+      }
+    } catch (err) {
+      console.error("Cesium Viewer WebGL initialization failed:", err);
+      initRef.current = false;
+      setWebglError(err?.message || "Browser WebGL initialization failed");
+      return;
+    }
+
+    if (!viewer) {
+      initRef.current = false;
+      setWebglError("Unable to create Cesium Viewer instance.");
+      return;
+    }
+
+    // Assign viewer reference immediately
+    viewerRef.current = viewer;
 
     // Save viewer instance on window for console debugging
     window.cesiumViewer = viewer;
@@ -197,15 +247,15 @@ export default function CesiumViewer({ useDemoData = false }) {
     viewer.scene.globe.enableLighting = false;
     viewer.scene.fog.enabled = false;
     viewer.scene.globe.depthTestAgainstTerrain = true;
-    viewer.scene.skyAtmosphere.show = true;
+    if (viewer.scene.skyAtmosphere) {
+      viewer.scene.skyAtmosphere.show = true;
+    }
 
     // Configure real Google Maps Platform basemap provider (Roadmap / Satellite)
     setupBaseMap(viewer, { mode: basemapMode });
 
     // Extension hook for future Google Photorealistic 3D Tiles (disabled per milestone specs)
     togglePhotorealistic3DTiles(viewer, false);
-
-    viewerRef.current = viewer;
 
     loadEntities(viewer);
 
@@ -225,50 +275,63 @@ export default function CesiumViewer({ useDemoData = false }) {
     });
 
     // Click handler — resolves unit entity (floor:*), footprint polygon (footprint:*), or building entity (building:*)
-    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-    handler.setInputAction((click) => {
-      const pickedObjects = viewer.scene.drillPick(click.position);
-      if (pickedObjects && pickedObjects.length > 0) {
-        // 1. First check for 3D property unit volume
-        const propertyPick = pickedObjects.find((p) => {
-          const id = p.id?.id || "";
-          return (
-            id.startsWith("floor:") ||
-            p.id?.properties?.entityType?.getValue() === "floor"
-          );
-        });
+    let handler = null;
+    try {
+      handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+      handler.setInputAction((click) => {
+        const pickedObjects = viewer.scene.drillPick(click.position);
+        if (pickedObjects && pickedObjects.length > 0) {
+          // 1. First check for 3D property unit volume
+          const propertyPick = pickedObjects.find((p) => {
+            const id = p.id?.id || "";
+            return (
+              id.startsWith("floor:") ||
+              p.id?.properties?.entityType?.getValue() === "floor"
+            );
+          });
 
-        if (propertyPick && propertyPick.id) {
-          const entityId = propertyPick.id.id || "";
-          const ulpin = entityId.replace("floor:", "");
-          const bldId = propertyPick.id.properties?.building_id?.getValue();
-          selectProperty(ulpin, bldId);
-          return;
+          if (propertyPick && propertyPick.id) {
+            const entityId = propertyPick.id.id || "";
+            const ulpin = entityId.replace("floor:", "");
+            const bldId = propertyPick.id.properties?.building_id?.getValue();
+            selectProperty(ulpin, bldId);
+            return;
+          }
+
+          // 2. Next check for building or footprint entity
+          const buildingPick = pickedObjects.find((p) => {
+            const id = p.id?.id || "";
+            return (
+              id.startsWith("building:") ||
+              id.startsWith("footprint:") ||
+              p.id?.properties?.entityType?.getValue() === "building" ||
+              p.id?.properties?.entityType?.getValue() === "footprint"
+            );
+          });
+
+          if (buildingPick && buildingPick.id) {
+            const entityId = buildingPick.id.id || "";
+            const bldId = entityId.replace("building:", "").replace("footprint:", "");
+            selectBuilding(bldId);
+          }
         }
-
-        // 2. Next check for building or footprint entity
-        const buildingPick = pickedObjects.find((p) => {
-          const id = p.id?.id || "";
-          return (
-            id.startsWith("building:") ||
-            id.startsWith("footprint:") ||
-            p.id?.properties?.entityType?.getValue() === "building" ||
-            p.id?.properties?.entityType?.getValue() === "footprint"
-          );
-        });
-
-        if (buildingPick && buildingPick.id) {
-          const entityId = buildingPick.id.id || "";
-          const bldId = entityId.replace("building:", "").replace("footprint:", "");
-          selectBuilding(bldId);
-        }
-      }
-    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    } catch (e) {
+      console.warn("Could not bind screen space event handler:", e);
+    }
 
     return () => {
-      handler.destroy();
+      if (handler && !handler.isDestroyed()) {
+        try {
+          handler.destroy();
+        } catch {}
+      }
       if (viewerRef.current && !viewerRef.current.isDestroyed()) {
-        viewerRef.current.destroy();
+        try {
+          viewerRef.current.destroy();
+        } catch (e) {
+          console.warn("Error during Cesium viewer destruction:", e);
+        }
       }
       viewerRef.current = null;
       initRef.current = false;
@@ -461,6 +524,37 @@ export default function CesiumViewer({ useDemoData = false }) {
 
     consumeCameraCommand();
   }, [cameraCommand, selectedBuildingId, selectedPropertyId, consumeCameraCommand]);
+
+  if (webglError) {
+    return (
+      <div
+        ref={containerRef}
+        className="cesium-container flex flex-col items-center justify-center p-6 bg-slate-900 text-slate-200 border border-slate-800 rounded-lg text-center"
+        style={{ width: "100%", height: "100%" }}
+      >
+        <div className="max-w-md space-y-4">
+          <div className="w-12 h-12 mx-auto rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl font-bold">
+            ⚠️
+          </div>
+          <h3 className="text-lg font-semibold text-slate-100">
+            3D Globe WebGL Notice
+          </h3>
+          <p className="text-sm text-slate-400 leading-relaxed">
+            {webglError}
+          </p>
+          <p className="text-xs text-slate-500">
+            Ensure WebGL/Hardware Acceleration is enabled in your browser settings (Chrome/Edge: <code className="text-amber-300">chrome://settings/system</code>).
+          </p>
+          <button
+            onClick={handleRetry}
+            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-md shadow transition-colors"
+          >
+            Retry 3D Viewer
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
