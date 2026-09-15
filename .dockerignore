@@ -1,0 +1,13 @@
+.git
+.gitignore
+.vscode
+.env
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+node_modules
+dist
+data/*
+!data/sample
