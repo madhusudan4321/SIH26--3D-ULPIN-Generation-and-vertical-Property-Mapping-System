@@ -1,15 +1,3 @@
-/**
- * Dashboard Page — Main Application Layout
- *
- * Layout: Navbar (top) + Sidebar (left) + CesiumViewer (center) + PropertyPanel (right)
- *
- * Manages:
- * - Backend health check on mount
- * - ConnectionError display when backend unavailable
- * - Modal flow for Add Building / Import Document
- * - Processing status display
- */
-
 import { useState, useEffect, useCallback } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
@@ -23,6 +11,7 @@ import ManualEntryForm from "../components/ManualEntryForm";
 import ProcessingStatus from "../components/ProcessingStatus";
 import AlignmentOverlay from "../components/AlignmentOverlay";
 import LocalLidarViewer from "../components/LocalLidarViewer";
+import PhotogrammetryPanel from "../components/PhotogrammetryPanel";
 import { checkHealth, loadDemoData } from "../services/api";
 
 export default function Dashboard() {
@@ -31,7 +20,7 @@ export default function Dashboard() {
   const [useDemoData, setUseDemoData] = useState(false);
 
   // Modal state
-  const [activeModal, setActiveModal] = useState(null); // null | addBuilding | upload | review | manual | status
+  const [activeModal, setActiveModal] = useState(null); // null | addBuilding | upload | review | manual | status | lidar | photogrammetry
   const [uploadResult, setUploadResult] = useState(null);
   const [processingResult, setProcessingResult] = useState(null);
 
@@ -105,6 +94,7 @@ export default function Dashboard() {
           onAddBuilding={handleAddBuilding}
           onImportDocument={handleImportDocument}
           onOpenLidarViewer={() => setActiveModal("lidar")}
+          onOpenPhotogrammetry={() => setActiveModal("photogrammetry")}
           backendStatus={backendStatus === "connected" ? "connected" : "disconnected"}
           refreshKey={refreshKey}
         />
@@ -118,6 +108,12 @@ export default function Dashboard() {
       {/* Modals */}
       {activeModal === "lidar" && (
         <LocalLidarViewer onClose={() => setActiveModal(null)} />
+      )}
+      {activeModal === "photogrammetry" && (
+        <PhotogrammetryPanel
+          datasetName="2zz6-k952_aerial"
+          onClose={() => setActiveModal(null)}
+        />
       )}
       {activeModal === "addBuilding" && (
         <AddBuildingModal
@@ -159,3 +155,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

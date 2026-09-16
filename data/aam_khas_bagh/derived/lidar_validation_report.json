@@ -1,0 +1,164 @@
+{
+  "dataset": {
+    "source_file": "7csx-ne47_terresterial_lidar.e57",
+    "format": "E57 ASTM E57.04",
+    "scan_count": 21,
+    "total_points": 219637422,
+    "sampled_points": 70814,
+    "coordinate_frame": "AAM_KHAS_BAGH_LOCAL",
+    "georeferenced": false,
+    "raw_bounds": {
+      "x_min": -3.594,
+      "x_max": 22.027,
+      "x_range": 25.621,
+      "y_min": -30.739,
+      "y_max": 9.13,
+      "y_range": 39.869,
+      "z_min": -1.926,
+      "z_max": 5.449,
+      "z_range": 7.375
+    },
+    "sampled_bounds": {
+      "x_min": -64.429,
+      "x_max": 64.318,
+      "x_range": 128.747,
+      "y_min": -89.757,
+      "y_max": 59.466,
+      "y_range": 149.223,
+      "z_min": -3.603,
+      "z_max": 13.814,
+      "z_range": 17.417
+    },
+    "building_bounds": {
+      "x_min": -41.392,
+      "x_max": 61.849,
+      "x_range": 103.241,
+      "y_min": -86.291,
+      "y_max": 37.858,
+      "y_range": 124.149,
+      "z_min": -2.226,
+      "z_max": 11.593,
+      "z_range": 13.819
+    }
+  },
+  "classification": {
+    "building_points": 25727,
+    "building_percentage": 36.33,
+    "vegetation_percentage": 1.23,
+    "unknown_percentage": 23.04,
+    "outlier_percentage": 0.0,
+    "score_stats": {
+      "mean": 0.764,
+      "median": 0.769,
+      "p05": 0.664,
+      "p95": 0.853
+    }
+  },
+  "building_extraction": {
+    "building_points": 25727,
+    "xy_area_m2": 8407.84,
+    "building_height_m": 6.14,
+    "bbox": {
+      "x_min": -41.392,
+      "x_max": 61.849,
+      "x_range": 103.241,
+      "y_min": -86.291,
+      "y_max": 37.858,
+      "y_range": 124.149,
+      "z_min": -2.226,
+      "z_max": 11.593,
+      "z_range": 13.819
+    }
+  },
+  "spatial_coherence": {
+    "eps_1.0m": {
+      "eps_m": 1.0,
+      "component_count": 27,
+      "largest_component": 24598,
+      "largest_component_pct": 95.61,
+      "second_largest_component": 351,
+      "component_sizes_top5": [
+        24598,
+        351,
+        158,
+        77,
+        74
+      ]
+    },
+    "multiscale": {
+      "eps_0.5m": {
+        "eps_m": 0.5,
+        "component_count": 54,
+        "largest_component": 23167,
+        "largest_component_pct": 90.05,
+        "second_largest_component": 472,
+        "component_sizes_top5": [
+          23167,
+          472,
+          158,
+          116,
+          113
+        ]
+      },
+      "eps_0.75m": {
+        "eps_m": 0.75,
+        "component_count": 29,
+        "largest_component": 24317,
+        "largest_component_pct": 94.52,
+        "second_largest_component": 274,
+        "component_sizes_top5": [
+          24317,
+          274,
+          158,
+          113,
+          74
+        ]
+      },
+      "eps_1.0m": {
+        "eps_m": 1.0,
+        "component_count": 27,
+        "largest_component": 24598,
+        "largest_component_pct": 95.61,
+        "second_largest_component": 351,
+        "component_sizes_top5": [
+          24598,
+          351,
+          158,
+          77,
+          74
+        ]
+      },
+      "eps_1.5m": {
+        "eps_m": 1.5,
+        "component_count": 24,
+        "largest_component": 24857,
+        "largest_component_pct": 96.62,
+        "second_largest_component": 369,
+        "component_sizes_top5": [
+          24857,
+          369,
+          74,
+          40,
+          35
+        ]
+      }
+    }
+  },
+  "footprint": {
+    "derived_from_lidar": true,
+    "source_type": "lidar_extracted",
+    "georeferenced": false,
+    "crs": "AAM_KHAS_BAGH_LOCAL",
+    "area_m2": 8407.84
+  },
+  "height": {
+    "robust_height_m": 6.14,
+    "ground_elevation_p5": -2.226,
+    "roof_elevation_p95": 11.593
+  },
+  "readiness": "READY_WITH_WARNINGS",
+  "blocking_reasons": [],
+  "warnings": [
+    "Vegetation contamination near building (<0.3m): 7.94% > 5.0%"
+  ]
+}

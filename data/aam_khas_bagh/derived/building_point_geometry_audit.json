@@ -1,0 +1,311 @@
+{
+  "audit_title": "AAM KHAS BAGH RECONSTRUCTION DATA VALIDATION AUDIT",
+  "coordinate_system": "AAM_KHAS_BAGH_LOCAL",
+  "georeferenced": false,
+  "data_source": "aam_khas_bagh_classified_cloud.json",
+  "mesh_source": "aam_khas_bagh_hammam_mesh.ply",
+  "audits": {
+    "1_point_geometry": {
+      "point_count": 11049,
+      "x_min": -5.055,
+      "x_max": 22.972,
+      "y_min": -31.373,
+      "y_max": 9.564,
+      "z_min": -1.916,
+      "z_max": 5.449,
+      "x_range": 28.027,
+      "y_range": 40.937,
+      "z_range": 7.365,
+      "mean_x": 8.0421,
+      "mean_y": -11.2638,
+      "mean_z": 1.7269,
+      "median_x": 6.973,
+      "median_y": -11.431,
+      "median_z": 1.606,
+      "p05_z": -0.7346,
+      "p95_z": 4.081,
+      "p01_z": -1.4175,
+      "p99_z": 4.342,
+      "std_x": 5.8759,
+      "std_y": 9.2427,
+      "std_z": 1.5986
+    },
+    "2_height_distribution": {
+      "z_bins_1m": {
+        "0-1m": {
+          "count": 360,
+          "pct": 3.26
+        },
+        "1-2m": {
+          "count": 1727,
+          "pct": 15.63
+        },
+        "2-3m": {
+          "count": 2363,
+          "pct": 21.39
+        },
+        "3-4m": {
+          "count": 1763,
+          "pct": 15.96
+        },
+        "4-5m": {
+          "count": 1479,
+          "pct": 13.39
+        },
+        "5-6m": {
+          "count": 2811,
+          "pct": 25.44
+        },
+        "6-7m": {
+          "count": 539,
+          "pct": 4.88
+        },
+        "7-8m": {
+          "count": 7,
+          "pct": 0.06
+        },
+        "8-9m": {
+          "count": 0,
+          "pct": 0.0
+        }
+      },
+      "z_min_absolute": -1.916,
+      "z_max_absolute": 5.449,
+      "z_range_m": 7.365,
+      "xy_footprint_area_m2": 1147.34,
+      "bounding_volume_m3": 8450.17,
+      "xy_density_pts_per_m2": 9.63,
+      "volume_density_pts_per_m3": 1.31,
+      "occupied_z_bins": 8,
+      "total_z_bins": 9,
+      "vertical_coverage_pct": 88.9,
+      "bottom_25pct_z_threshold": 0.348,
+      "bottom_25pct_point_count": 2764,
+      "bottom_25pct_of_total": 25.02,
+      "middle_50pct_point_count": 5516,
+      "middle_50pct_of_total": 49.92,
+      "top_25pct_z_threshold": 3.218,
+      "top_25pct_point_count": 2769,
+      "top_25pct_of_total": 25.06,
+      "3d_coverage_diagnosis": "GOOD_3D -- reasonable vertical distribution"
+    },
+    "3_classification": {
+      "total_selected_building_points": 11049,
+      "building_like_points": 6188,
+      "building_like_pct": 56.01,
+      "vegetation_like_points": 3652,
+      "vegetation_like_pct": 33.05,
+      "isolated_outlier_points": 1440,
+      "isolated_outlier_pct": 13.03,
+      "local_z_variance_stats": {
+        "mean": 0.0315,
+        "median": 0.031,
+        "p90": 0.062,
+        "p99": 0.0783
+      },
+      "local_z_range_stats": {
+        "mean": 0.5478,
+        "median": 0.593,
+        "p90": 0.886
+      },
+      "classification_confidence": "HEURISTIC -- not ground truth",
+      "note": "Vegetation detection uses local Z variance heuristic. Uncertain classifications preserved. No data deleted.",
+      "vegetation_z_profile": {
+        "z_min": -1.604,
+        "z_max": 5.114,
+        "z_mean": 1.1237,
+        "z_range": 6.718
+      },
+      "building_z_profile": {
+        "z_min": -1.916,
+        "z_max": 5.449,
+        "z_mean": 2.0522,
+        "z_range": 7.365
+      },
+      "non_ground_total": 14645,
+      "building_fraction_of_non_ground": 75.45
+    },
+    "4_input_vs_mesh": {
+      "input_bounds": {
+        "x_min": -5.055,
+        "x_max": 22.972,
+        "y_min": -31.373,
+        "y_max": 9.564,
+        "z_min": -1.916,
+        "z_max": 5.449
+      },
+      "mesh_bounds": {
+        "x_min": -9.882,
+        "x_max": 22.434,
+        "y_min": -31.54,
+        "y_max": 21.832,
+        "z_min": -4.111,
+        "z_max": 7.056
+      },
+      "input_dimensions": {
+        "x_range": 28.027,
+        "y_range": 40.937,
+        "z_range": 7.365
+      },
+      "mesh_dimensions": {
+        "width_m": 32.316,
+        "length_m": 53.372,
+        "height_m": 11.167
+      },
+      "x_range_difference_m": 4.289,
+      "x_mesh_expansion_pct": 15.3,
+      "y_range_difference_m": 12.435,
+      "y_mesh_expansion_pct": 30.38,
+      "z_range_difference_m": 3.802,
+      "z_mesh_expansion_pct": 51.62,
+      "x_mesh_extends_below_input": 4.827,
+      "x_mesh_extends_above_input": -0.538,
+      "y_mesh_extends_below_input": 0.167,
+      "y_mesh_extends_above_input": 12.268,
+      "z_mesh_extends_below_input": 2.195,
+      "z_mesh_extends_above_input": 1.607
+    },
+    "5_poisson_support": {
+      "mesh_support_from_metadata": {
+        "total_samples": 10000,
+        "supported_within_01m": 2015,
+        "pct_supported_within_01m": 20.15,
+        "supported_within_02m": 3951,
+        "pct_supported_within_02m": 39.51,
+        "supported_within_05m": 6159,
+        "pct_supported_within_05m": 61.59,
+        "supported_within_10m": 7976,
+        "pct_supported_within_10m": 79.76,
+        "mesh_sample_to_lidar_distance": {
+          "mean_m": 0.5358,
+          "median_m": 0.3027,
+          "p95_m": 1.6404,
+          "max_m": 2.591
+        }
+      },
+      "point_coverage_from_metadata": {
+        "pct_within_005m": 77.47,
+        "pct_within_010m": 89.97,
+        "pct_within_020m": 95.62,
+        "pct_within_050m": 98.94
+      },
+      "point_to_mesh_distance_from_metadata": {
+        "mean_m": 0.046,
+        "median_m": 0.0167,
+        "p95_m": 0.1775,
+        "p99_m": 0.5198,
+        "max_m": 1.6452
+      },
+      "interpretation": {
+        "well_supported_pct": 0,
+        "weakly_supported_pct": 0,
+        "unsupported_pct": 100,
+        "note": "Well-supported = mesh within 0.50m of LiDAR point. Weakly = 0.50-1.00m. Unsupported = >1.00m."
+      },
+      "estimated_area_breakdown": {
+        "total_mesh_area_m2": 1619.11,
+        "supported_area_m2": 0.0,
+        "weakly_supported_area_m2": 0.0,
+        "unsupported_area_m2": 1619.11
+      }
+    },
+    "6_normals": {
+      "normals_estimated": true,
+      "normal_estimation_method": "Open3D KDTreeSearchParamHybrid",
+      "search_radius_m": 0.4488,
+      "max_nn": 30,
+      "orientation_method": "orient_normals_consistent_tangent_plane(k=15), fallback: orient_normals_towards_camera_location(centroid + [0,0,10])",
+      "point_spacing": {
+        "mean_m": 0.1303,
+        "median_m": 0.1051,
+        "p25_m": 0.0768,
+        "p75_m": 0.1496,
+        "p95_m": 0.3065
+      },
+      "search_radius_to_median_spacing_ratio": 4.27,
+      "potential_issues": [
+        "orient_normals_consistent_tangent_plane can fail on complex architectural geometry (e.g., domes, arches, internal corners). Fallback uses a single camera-above assumption which may incorrectly orient downward-facing normals (e.g., ceiling/soffit surfaces)."
+      ]
+    },
+    "7_orientation_diagnostics": {
+      "top_view": {
+        "xy_extent_x_m": 28.027,
+        "xy_extent_y_m": 40.937,
+        "grid_resolution_m": 1.0,
+        "occupied_cells": 442,
+        "total_cells": 1189,
+        "fill_ratio_pct": 37.17
+      },
+      "front_view": {
+        "xz_extent_x_m": 28.027,
+        "xz_extent_z_m": 7.365,
+        "height_to_width_ratio": 0.263
+      },
+      "side_view": {
+        "yz_extent_y_m": 40.937,
+        "yz_extent_z_m": 7.365,
+        "height_to_length_ratio": 0.18
+      },
+      "perspective": {
+        "mesh_component_count": 10,
+        "main_component_triangles": 62621,
+        "fragment_triangles": 1240,
+        "fragment_components": 9,
+        "main_component_fraction_pct": 98.06
+      },
+      "mesh_expansion_beyond_input": {
+        "x_expansion_m": 4.289,
+        "y_expansion_m": 12.435,
+        "z_expansion_m": 3.802
+      },
+      "mesh_classification": "E -- UNSUPPORTED POISSON SURFACE"
+    },
+    "8_height_consistency": {
+      "report_height_m": 6.01,
+      "report_ground_z": -1.926,
+      "report_roof_z": 4.081,
+      "mesh_height_m": 11.167,
+      "mesh_z_min": -4.111,
+      "mesh_z_max": 7.056,
+      "input_z_min": -1.916,
+      "input_z_max": 5.449,
+      "input_z_range_m": 7.365,
+      "input_p05_z": -0.7346,
+      "input_p95_z": 4.081,
+      "input_robust_height_p05_p95_m": 4.8156,
+      "discrepancy_report_vs_mesh_m": 5.157,
+      "ground_z_vs_mesh_bottom_diff": 2.185,
+      "mesh_extends_below_input_z": 2.195,
+      "mesh_extends_above_input_z": 1.607,
+      "discrepancy_m": 5.157,
+      "identified_causes": [
+        {
+          "cause": "DIFFERENT_Z_REFERENCE",
+          "detail": "Report ground_z (-1.926) differs from mesh z_min (-4.111) by 2.185m. Report height uses nearby ground points' P5 percentile, while mesh height is raw vertex Z range.",
+          "severity": "HIGH"
+        },
+        {
+          "cause": "POISSON_INTERPOLATION_EXTENDS_BEYOND_INPUT",
+          "detail": "Mesh extends 2.195m below and 1.607m above input points. Poisson surface reconstruction creates continuous surfaces that extend beyond observed data.",
+          "severity": "HIGH"
+        },
+        {
+          "cause": "MULTIPLE_DISCONNECTED_STRUCTURES",
+          "detail": "Mesh has 10 disconnected components. The DBSCAN cluster (eps=1.2m) may have merged multiple structures into one candidate.",
+          "severity": "MEDIUM"
+        }
+      ],
+      "primary_cause": "DIFFERENT_Z_REFERENCE",
+      "primary_cause_detail": "Report ground_z (-1.926) differs from mesh z_min (-4.111) by 2.185m. Report height uses nearby ground points' P5 percentile, while mesh height is raw vertex Z range."
+    },
+    "final_report": {
+      "DATA_QUALITY": "GOOD",
+      "3D_COVERAGE": "GOOD",
+      "BUILDING_SEGMENTATION": "POOR",
+      "MESH_QUALITY": "POOR",
+      "MAIN_FAILURE": "Report ground_z (-1.926) differs from mesh z_min (-4.111) by 2.185m. Report height uses nearby ground points' P5 percentile, while mesh height is raw vertex Z range.",
+      "RECOMMENDED_NEXT_STEP": "Separate vegetation from building points BEFORE mesh reconstruction. Use color-based filtering (green vegetation vs stone/plaster building surfaces) and local planarity analysis to isolate actual building surfaces. Then reconstruct using only verified building points.",
+      "mesh_classification": "E -- UNSUPPORTED POISSON SURFACE"
+    }
+  }
+}

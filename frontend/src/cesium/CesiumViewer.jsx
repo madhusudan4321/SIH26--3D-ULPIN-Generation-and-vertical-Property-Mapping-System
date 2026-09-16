@@ -13,7 +13,7 @@
  * 9. Provide interactive camera view navigation (Top View, 3D/Reset View, Compass N/S/E/W)
  */
 
-import { useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import * as Cesium from "cesium";
 import { useSelection } from "../hooks/useSelection";
 import { getParcels, getBuildings, getBuilding, getUndergroundAssets, loadDemoData } from "../services/api";
@@ -61,10 +61,20 @@ export default function CesiumViewer({ useDemoData = false }) {
     consumeCameraCommand,
   } = useSelection();
 
+  // Diagnostics overlay state
+  const [diagnostics, setDiagnostics] = useState({
+    viewer: "INITIALIZING",
+    webgl: "CHECKING",
+    basemap: (basemapMode || "ROADMAP").toUpperCase(),
+    camera: "READY",
+    width: 0,
+    height: 0,
+  });
+
   // ─── Load Entities ──────────────────────────────────────
 
   const loadEntities = useCallback(async (viewer) => {
-    if (!viewer || viewer.isDestroyed()) return;
+    if (!viewer || viewer.isDestroyed()) return [];
 
     let parcels = [];
     let buildings = [];
@@ -82,13 +92,13 @@ export default function CesiumViewer({ useDemoData = false }) {
     } else {
       try {
         const bSummaries = await getBuildings();
-        if (!viewer || viewer.isDestroyed()) return;
+        if (!viewer || viewer.isDestroyed()) return [];
 
         if (bSummaries && bSummaries.length > 0) {
           const bDetails = await Promise.all(
             bSummaries.map((s) => getBuilding(s.building_id).catch(() => null))
           );
-          if (!viewer || viewer.isDestroyed()) return;
+          if (!viewer || viewer.isDestroyed()) return [];
 
           for (const bDetail of bDetails) {
             if (bDetail) {
@@ -100,10 +110,10 @@ export default function CesiumViewer({ useDemoData = false }) {
         }
 
         parcels = await getParcels().catch(() => []);
-        if (!viewer || viewer.isDestroyed()) return;
+        if (!viewer || viewer.isDestroyed()) return [];
 
         underground = await getUndergroundAssets().catch(() => []);
-        if (!viewer || viewer.isDestroyed()) return;
+        if (!viewer || viewer.isDestroyed()) return [];
 
         // If no DB buildings exist yet, show demo data
         if (buildings.length === 0) {
@@ -113,7 +123,7 @@ export default function CesiumViewer({ useDemoData = false }) {
           properties = demo.properties;
         }
       } catch (e) {
-        if (!viewer || viewer.isDestroyed()) return;
+        if (!viewer || viewer.isDestroyed()) return [];
         console.warn("API load failed, using fallback demo data:", e);
         const demo = loadDemoData();
         buildings = demo.buildings;
@@ -124,7 +134,7 @@ export default function CesiumViewer({ useDemoData = false }) {
       }
     }
 
-    if (!viewer || viewer.isDestroyed()) return;
+    if (!viewer || viewer.isDestroyed()) return [];
 
     buildingsDataRef.current = buildings;
     floorsDataRef.current = floors;
@@ -143,6 +153,8 @@ export default function CesiumViewer({ useDemoData = false }) {
     });
 
     setUndergroundVisibility(entitiesRef.current.underground, false);
+
+    return buildings;
   }, [useDemoData]);
 
   // ─── Initialize Viewer ──────────────────────────────────
@@ -151,40 +163,69 @@ export default function CesiumViewer({ useDemoData = false }) {
     if (!containerRef.current || initRef.current) return;
     initRef.current = true;
 
-    // Guaranteed initial basemap imagery provider (prevents 0-layer crash)
-    const initialImageryProvider = createGoogleBasemapProvider(basemapMode);
+    // 1. Check WebGL capabilities explicitly
+    let webglSupported = false;
+    try {
+      const canvasTest = document.createElement("canvas");
+      webglSupported = !!(
+        window.WebGLRenderingContext &&
+        (canvasTest.getContext("webgl") ||
+          canvasTest.getContext("experimental-webgl") ||
+          canvasTest.getContext("webgl2"))
+      );
+    } catch (e) {
+      webglSupported = false;
+    }
 
-    const viewer = new Cesium.Viewer(containerRef.current, {
-      imageryProvider: initialImageryProvider,
-      baseLayerPicker: false,
-      geocoder: false,
-      homeButton: false,
-      sceneModePicker: false,
-      navigationHelpButton: false,
-      animation: false,
-      timeline: false,
-      fullscreenButton: false,
-      vrButton: false,
-      selectionIndicator: true,
-      infoBox: false,
-      creditContainer: document.createElement("div"),
-      contextOptions: {
-        webgl: {
-          alpha: false,
-          depth: true,
-          stencil: false,
-          antialias: true,
-          premultipliedAlpha: true,
-          preserveDrawingBuffer: true,
-          failIfMajorPerformanceCaveat: false,
-        },
-      },
+    setDiagnostics((prev) => ({
+      ...prev,
+      webgl: webglSupported ? "READY" : "ERROR",
+    }));
+
+    // 2. Guaranteed initial basemap provider to prevent 0-layer crash
+    const initialImageryProvider = createGoogleBasemapProvider(basemapMode, "", (err) => {
+      console.warn("Initial basemap provider creation notice:", err);
     });
+
+    let viewer;
+    try {
+      viewer = new Cesium.Viewer(containerRef.current, {
+        imageryProvider: initialImageryProvider,
+        baseLayerPicker: false,
+        geocoder: false,
+        homeButton: false,
+        sceneModePicker: false,
+        navigationHelpButton: false,
+        animation: false,
+        timeline: false,
+        fullscreenButton: false,
+        vrButton: false,
+        selectionIndicator: true,
+        infoBox: false,
+        requestRenderMode: false,
+        creditContainer: document.createElement("div"),
+        contextOptions: {
+          webgl: {
+            alpha: false,
+            depth: true,
+            stencil: false,
+            antialias: true,
+            premultipliedAlpha: true,
+            preserveDrawingBuffer: true,
+            failIfMajorPerformanceCaveat: false,
+          },
+        },
+      });
+
+      setDiagnostics((prev) => ({ ...prev, viewer: "READY" }));
+    } catch (err) {
+      console.error("Failed to construct Cesium.Viewer:", err);
+      setDiagnostics((prev) => ({ ...prev, viewer: "ERROR", camera: "ERROR" }));
+      return;
+    }
 
     // Save viewer instance on window for console debugging
     window.cesiumViewer = viewer;
-    viewer._currentBasemapMode = basemapMode;
-    viewer._currentBaseImageryLayer = viewer.imageryLayers.get(0);
 
     // Suppress default red error dialog popups and log full stack
     if (viewer.cesiumWidget) {
@@ -226,18 +267,8 @@ export default function CesiumViewer({ useDemoData = false }) {
     viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.scene.skyAtmosphere.show = true;
 
-    // Configure real Google Maps Platform basemap provider (Roadmap / Satellite)
-    setupBaseMap(viewer, { mode: basemapMode });
-
-    // Extension hook for future Google Photorealistic 3D Tiles (disabled per milestone specs)
-    togglePhotorealistic3DTiles(viewer, false);
-
-    viewerRef.current = viewer;
-
-    loadEntities(viewer);
-
-    // Initial camera view focused on target region
-    viewer.camera.flyTo({
+    // Set initial camera view directly without startup animation
+    viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(
         SAMPLE_CENTER.lon - 0.001,
         SAMPLE_CENTER.lat - 0.001,
@@ -248,7 +279,85 @@ export default function CesiumViewer({ useDemoData = false }) {
         pitch: Cesium.Math.toRadians(-30),
         roll: 0,
       },
-      duration: 2.0,
+    });
+
+    // Configure real Google Maps Platform basemap provider with status callback
+    setupBaseMap(viewer, {
+      mode: basemapMode,
+      onStatusChange: (status) => {
+        setDiagnostics((prev) => ({ ...prev, basemap: status }));
+      },
+    });
+
+    // Extension hook for future Google Photorealistic 3D Tiles (disabled per milestone specs)
+    togglePhotorealistic3DTiles(viewer, false);
+
+    viewerRef.current = viewer;
+
+    // Observe container size for responsive WebGL viewport rendering
+    let resizeObserver = null;
+    if (typeof ResizeObserver !== "undefined" && containerRef.current) {
+      resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const { width, height } = entry.contentRect;
+          setDiagnostics((prev) => ({
+            ...prev,
+            width: Math.round(width),
+            height: Math.round(height),
+          }));
+          if (viewerRef.current && !viewerRef.current.isDestroyed()) {
+            viewerRef.current.resize();
+          }
+        }
+      });
+      resizeObserver.observe(containerRef.current);
+    }
+
+    loadEntities(viewer).then((buildings) => {
+      if (!viewer || viewer.isDestroyed()) return;
+
+      const geoBuildings = (buildings || []).filter(
+        (b) => b.latitude != null && b.longitude != null
+      );
+
+      let flyLon = SAMPLE_CENTER.lon;
+      let flyLat = SAMPLE_CENTER.lat;
+      let flyHeight = 350;
+
+      if (geoBuildings.length > 0) {
+        let sumLon = 0, sumLat = 0, maxH = 0;
+        for (const b of geoBuildings) {
+          sumLon += b.longitude;
+          sumLat += b.latitude;
+          maxH = Math.max(maxH, b.height || 18);
+        }
+        flyLon = sumLon / geoBuildings.length;
+        flyLat = sumLat / geoBuildings.length;
+
+        let maxDist = 0;
+        for (const b of geoBuildings) {
+          const dLon = b.longitude - flyLon;
+          const dLat = b.latitude - flyLat;
+          maxDist = Math.max(maxDist, Math.sqrt(dLon * dLon + dLat * dLat));
+        }
+        const spreadMeters = maxDist * 111000;
+        flyHeight = Math.max(80, Math.min(500, spreadMeters * 3 + maxH * 2));
+      }
+
+      // Position camera directly to building centroid without intro animation
+      viewer.camera.setView({
+        destination: Cesium.Cartesian3.fromDegrees(
+          flyLon - 0.001,
+          flyLat - 0.001,
+          flyHeight
+        ),
+        orientation: {
+          heading: Cesium.Math.toRadians(30),
+          pitch: Cesium.Math.toRadians(-30),
+          roll: 0,
+        },
+      });
+      viewer.scene.requestRender();
     });
 
     // Click handler — resolves unit entity (floor:*), footprint polygon (footprint:*), or building entity (building:*)
@@ -493,7 +602,92 @@ export default function CesiumViewer({ useDemoData = false }) {
     <div
       ref={containerRef}
       className="cesium-container"
-      style={{ width: "100%", height: "100%" }}
-    />
+      style={{ width: "100%", height: "100%", position: "relative" }}
+    >
+      {/* Compact non-blocking development status indicator overlay */}
+      <div
+        className="cesium-diagnostics-overlay"
+        style={{
+          position: "absolute",
+          bottom: "12px",
+          left: "12px",
+          zIndex: 99,
+          background: "rgba(15, 23, 42, 0.85)",
+          backdropFilter: "blur(8px)",
+          border: "1px solid rgba(148, 163, 184, 0.2)",
+          borderRadius: "6px",
+          padding: "4px 10px",
+          fontSize: "11px",
+          fontFamily: "monospace",
+          color: "#cbd5e1",
+          pointerEvents: "none",
+          display: "flex",
+          gap: "10px",
+          alignItems: "center",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+        }}
+      >
+        <span>
+          VIEWER:{" "}
+          <strong
+            style={{
+              color: diagnostics.viewer === "READY" ? "#34d399" : "#f87171",
+            }}
+          >
+            {diagnostics.viewer}
+          </strong>
+        </span>
+        <span>|</span>
+        <span>
+          WEBGL:{" "}
+          <strong
+            style={{
+              color: diagnostics.webgl === "READY" ? "#34d399" : "#f87171",
+            }}
+          >
+            {diagnostics.webgl}
+          </strong>
+        </span>
+        <span>|</span>
+        <span>
+          BASEMAP:{" "}
+          <strong
+            style={{
+              color:
+                diagnostics.basemap === "ERROR"
+                  ? "#f87171"
+                  : diagnostics.basemap === "FALLBACK"
+                  ? "#fbbf24"
+                  : "#38bdf8",
+            }}
+          >
+            {diagnostics.basemap}
+          </strong>
+        </span>
+        <span>|</span>
+        <span>
+          CAMERA:{" "}
+          <strong
+            style={{
+              color: diagnostics.camera === "READY" ? "#34d399" : "#f87171",
+            }}
+          >
+            {diagnostics.camera}
+          </strong>
+        </span>
+        {diagnostics.width > 0 && (
+          <>
+            <span>|</span>
+            <span>
+              DIMENSIONS:{" "}
+              <strong>
+                {diagnostics.width}×{diagnostics.height}
+              </strong>
+            </span>
+          </>
+        )}
+      </div>
+    </div>
   );
 }
+

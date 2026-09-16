@@ -10,7 +10,7 @@ import LayerControl from "./LayerControl";
 import { getBuildings } from "../services/api";
 import { useSelection } from "../hooks/useSelection";
 
-export default function Sidebar({ onAddBuilding, onImportDocument, onOpenLidarViewer, backendStatus, refreshKey }) {
+export default function Sidebar({ onAddBuilding, onImportDocument, onOpenLidarViewer, onOpenPhotogrammetry, backendStatus, refreshKey }) {
   const [buildings, setBuildings] = useState([]);
   const [loadingBuildings, setLoadingBuildings] = useState(false);
   const { selectedBuildingId, flyToBuilding, selectBuilding } = useSelection();
@@ -123,7 +123,11 @@ export default function Sidebar({ onAddBuilding, onImportDocument, onOpenLidarVi
           >
             📡 Local LiDAR Viewer
           </button>
-          <button className="sidebar-btn" disabled title="Planned for future phase">
+          <button
+            className="sidebar-btn sidebar-btn-active"
+            onClick={onOpenPhotogrammetry}
+            title="Inspect Phase 2 Drone Photogrammetry pipeline and 2zz6-k952_aerial reconstruction metrics"
+          >
             📷 Drone Photogrammetry
           </button>
         </div>

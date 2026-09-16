@@ -106,10 +106,10 @@ export function createBuildingEntities(viewer, buildings) {
       name: `Building ${building.name || building.building_id}`,
       polygon: {
         hierarchy: new Cesium.PolygonHierarchy(positions),
-        material: Cesium.Color.SLATEGRAY.withAlpha(0.04),
+        material: Cesium.Color.SLATEGRAY.withAlpha(0.14),
         outline: true,
         outlineColor: BUILDING_OUTLINE_COLOR,
-        outlineWidth: 1,
+        outlineWidth: 2,
         height: groundElev,
         extrudedHeight: groundElev + height,
         heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
@@ -153,7 +153,7 @@ export function updateBuildingShell(entities, shellMode = "transparent") {
       } else {
         // transparent default
         entity.show = true;
-        entity.polygon.material = Cesium.Color.SLATEGRAY.withAlpha(0.04);
+        entity.polygon.material = Cesium.Color.SLATEGRAY.withAlpha(0.14);
       }
     }
   }
@@ -188,7 +188,7 @@ export function highlightBuilding(entities, selectedBuildingId) {
         entity.polygon.outlineWidth = 2;
       } else {
         entity.polygon.outlineColor = BUILDING_OUTLINE_COLOR;
-        entity.polygon.outlineWidth = 1;
+        entity.polygon.outlineWidth = 2;
       }
     }
   }

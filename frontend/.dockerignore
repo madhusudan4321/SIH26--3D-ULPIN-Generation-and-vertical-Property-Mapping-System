@@ -1,0 +1,12 @@
+node_modules
+dist
+public/cesium
+*.log
+.git
+.gitignore
+.vscode
+.idea
+.env
+.env.*
+.oxlintrc.json
+

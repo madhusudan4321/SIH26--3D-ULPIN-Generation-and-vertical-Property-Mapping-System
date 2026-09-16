@@ -1,0 +1,54 @@
+{
+  "dataset": {
+    "name": "2zz6-k952_aerial",
+    "image_directory": "D:\\SIH26- 3D ULPIN Generation and vertical Property Mapping System\\data\\data\\sample\\drone_images",
+    "pipeline_status": "WAITING_FOR_IMAGES",
+    "timestamp": "2026-09-16T03:56:50.882677+00:00"
+  },
+  "images": {
+    "total_discovered": 0,
+    "valid": 0,
+    "warning": 0,
+    "invalid": 0,
+    "resolution_range": {},
+    "mean_sharpness_score": 0.0
+  },
+  "exif": {
+    "cameras_detected": [],
+    "gps_metadata_available": false,
+    "gps_image_count": 0,
+    "gps_image_percentage": 0.0
+  },
+  "georeferencing": {
+    "photogrammetry_georeferenced": false,
+    "coordinate_frame": "PHOTOGRAMMETRIC_LOCAL",
+    "crs": null,
+    "note": "No images available."
+  },
+  "colmap": {
+    "installed": true,
+    "version": "COLMAP 4.2.0 (Commit be5e291 on 2026-08-31 with CUDA)",
+    "cuda_available": true,
+    "colmap_path": "D:\\colmap-x64-windows-cuda\\bin\\colmap.exe"
+  },
+  "sfm": {
+    "model_exists": false,
+    "registered_images": 0
+  },
+  "mvs": {
+    "status": "NOT_RUN",
+    "dense_point_count": 0,
+    "dense_ply_path": null
+  },
+  "pointcloud": {
+    "status": "NOT_RUN",
+    "processed_point_count": 0
+  },
+  "readiness": "NOT_READY",
+  "blocking_reasons": [
+    "Zero images discovered in target directory."
+  ],
+  "warnings": [
+    "No EXIF GPS metadata detected in images. Photogrammetry cloud is in PHOTOGRAMMETRIC_LOCAL frame."
+  ]
+}

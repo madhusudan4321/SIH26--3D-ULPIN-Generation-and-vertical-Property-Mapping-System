@@ -1,0 +1,44 @@
+{
+  "dataset_name": "router_test",
+  "source_directory": "C:\\Users\\Ashwani\\AppData\\Local\\Temp\\tmp8pcg80ig\\drone_images",
+  "total_discovered": 3,
+  "images": [
+    {
+      "filename": "drone_001.jpg",
+      "path": "C:\\Users\\Ashwani\\AppData\\Local\\Temp\\tmp8pcg80ig\\drone_images\\drone_001.jpg",
+      "relative_path": "drone_001.jpg",
+      "extension": ".jpg",
+      "file_size_bytes": 8228,
+      "size_mb": 0.008,
+      "width": 800,
+      "height": 600,
+      "format": "JPEG",
+      "readable": true
+    },
+    {
+      "filename": "drone_002.jpg",
+      "path": "C:\\Users\\Ashwani\\AppData\\Local\\Temp\\tmp8pcg80ig\\drone_images\\drone_002.jpg",
+      "relative_path": "drone_002.jpg",
+      "extension": ".jpg",
+      "file_size_bytes": 8228,
+      "size_mb": 0.008,
+      "width": 800,
+      "height": 600,
+      "format": "JPEG",
+      "readable": true
+    },
+    {
+      "filename": "drone_corrupt.jpg",
+      "path": "C:\\Users\\Ashwani\\AppData\\Local\\Temp\\tmp8pcg80ig\\drone_images\\drone_corrupt.jpg",
+      "relative_path": "drone_corrupt.jpg",
+      "extension": ".jpg",
+      "file_size_bytes": 22,
+      "size_mb": 0.0,
+      "width": 0,
+      "height": 0,
+      "format": null,
+      "readable": false,
+      "error": "cannot identify image file 'C:\\\\Users\\\\Ashwani\\\\AppData\\\\Local\\\\Temp\\\\tmp8pcg80ig\\\\drone_images\\\\drone_corrupt.jpg'"
+    }
+  ]
+}

@@ -1,0 +1,1127 @@
+{
+  "title": "AAM KHAS BAGH -- VEGETATION CLASSIFICATION REPORT",
+  "coordinate_system": "AAM_KHAS_BAGH_LOCAL",
+  "georeferenced": false,
+  "timestamp": "2026-09-14T14:45:41.859159",
+  "dataset": {
+    "source": "aam_khas_bagh_classified_cloud.json",
+    "candidate_count": 11049,
+    "e57_file": "7csx-ne47_terresterial_lidar.e57"
+  },
+  "pipeline_parameters": {
+    "config": {
+      "weight_planarity": 0.3,
+      "weight_roughness": 0.25,
+      "weight_normal_consistency": 0.2,
+      "weight_density": 0.1,
+      "weight_color": 0.05,
+      "weight_spatial_context": 0.1,
+      "k_neighbors": 15,
+      "normal_search_radius": 0.45,
+      "normal_max_nn": 30,
+      "normal_angular_radius": 0.5,
+      "density_radius": 0.3,
+      "outlier_radius": 0.5,
+      "outlier_min_neighbors": 3,
+      "building_threshold": 0.65,
+      "vegetation_threshold": 0.3,
+      "norm_low_pct": 2.0,
+      "norm_high_pct": 98.0,
+      "rgb_available": true
+    },
+    "active_weights": {
+      "planarity": 0.3,
+      "roughness": 0.25,
+      "normal_consistency": 0.2,
+      "density": 0.1,
+      "color": 0.05,
+      "spatial_context": 0.1
+    }
+  },
+  "feature_definitions": {
+    "planarity": "PCA eigenvalue analysis of k-nearest neighbors. (lambda2-lambda3)/(lambda1+eps)",
+    "roughness": "Std of point-to-local-plane distances within k-neighborhood. INVERTED for scoring.",
+    "normal_consistency": "Angular variance (degrees) of normals within radius. INVERTED for scoring.",
+    "density": "Count of neighbors within density_radius.",
+    "color": "1 - green_ratio. Higher = less green = more building-like.",
+    "spatial_context": "Mean planarity of k-nearest neighbors."
+  },
+  "normalization": {
+    "method": "percentile_based_clipped",
+    "low_percentile": 2.0,
+    "high_percentile": 98.0,
+    "description": "Each feature is normalized to [0,1] using robust percentile clipping. Values below P2.0 map to 0, above P98.0 map to 1. This prevents extreme outliers from dominating the scale.",
+    "semantic_direction": {
+      "planarity": "higher raw -> higher normalized (more building-like)",
+      "roughness": "INVERTED: higher raw -> lower normalized (less building-like)",
+      "normal_consistency": "INVERTED: higher angular variance -> lower normalized",
+      "density": "higher raw -> higher normalized (more building-like)",
+      "color": "higher raw (less green) -> higher normalized (more building-like)",
+      "spatial_context": "higher raw -> higher normalized (more building-like)"
+    },
+    "boundaries_used": {
+      "planarity": {
+        "p2.0": 0.074887,
+        "p98.0": 0.863203
+      },
+      "roughness": {
+        "p2.0": 0.001069,
+        "p98.0": 0.146467
+      },
+      "normal_consistency": {
+        "p2.0": 0.0,
+        "p98.0": 29.431379
+      },
+      "density": {
+        "p2.0": 0.0,
+        "p98.0": 24.0
+      },
+      "color": {
+        "p2.0": 0.528202,
+        "p98.0": 0.712281
+      },
+      "spatial_context": {
+        "p2.0": 0.194898,
+        "p98.0": 0.687478
+      }
+    }
+  },
+  "classification": {
+    "class_counts": {
+      "BUILDING": 4299,
+      "VEGETATION": 907,
+      "UNKNOWN": 5265,
+      "OUTLIER": 578
+    },
+    "class_percentages": {
+      "BUILDING": 38.91,
+      "VEGETATION": 8.21,
+      "UNKNOWN": 47.65,
+      "OUTLIER": 5.23
+    },
+    "total_classified": 11049,
+    "total_matches_input": true
+  },
+  "per_class_analysis": {
+    "BUILDING": {
+      "count": 4299,
+      "pct": 38.91,
+      "bounds": {
+        "x_min": -3.33,
+        "x_max": 18.767,
+        "y_min": -27.881,
+        "y_max": 9.088,
+        "z_min": -1.681,
+        "z_max": 4.689
+      },
+      "z_distribution": {
+        "0-1m": {
+          "count": 173,
+          "pct": 4.02
+        },
+        "1-2m": {
+          "count": 783,
+          "pct": 18.21
+        },
+        "2-3m": {
+          "count": 866,
+          "pct": 20.14
+        },
+        "3-4m": {
+          "count": 518,
+          "pct": 12.05
+        },
+        "4-5m": {
+          "count": 569,
+          "pct": 13.24
+        },
+        "5-6m": {
+          "count": 1138,
+          "pct": 26.47
+        },
+        "6-7m": {
+          "count": 252,
+          "pct": 5.86
+        },
+        "7-8m": {
+          "count": 0,
+          "pct": 0.0
+        }
+      },
+      "xy_footprint_m2": 816.9,
+      "point_density_pts_m3": 0.83
+    },
+    "VEGETATION": {
+      "count": 907,
+      "pct": 8.21,
+      "bounds": {
+        "x_min": 0.3,
+        "x_max": 22.815,
+        "y_min": -30.472,
+        "y_max": 9.006,
+        "z_min": -1.583,
+        "z_max": 5.449
+      },
+      "z_distribution": {
+        "0-1m": {
+          "count": 11,
+          "pct": 1.21
+        },
+        "1-2m": {
+          "count": 86,
+          "pct": 9.48
+        },
+        "2-3m": {
+          "count": 218,
+          "pct": 24.04
+        },
+        "3-4m": {
+          "count": 250,
+          "pct": 27.56
+        },
+        "4-5m": {
+          "count": 185,
+          "pct": 20.4
+        },
+        "5-6m": {
+          "count": 130,
+          "pct": 14.33
+        },
+        "6-7m": {
+          "count": 22,
+          "pct": 2.43
+        },
+        "7-8m": {
+          "count": 5,
+          "pct": 0.55
+        },
+        "8-9m": {
+          "count": 0,
+          "pct": 0.0
+        }
+      },
+      "xy_footprint_m2": 888.85,
+      "point_density_pts_m3": 0.15
+    },
+    "UNKNOWN": {
+      "count": 5265,
+      "pct": 47.65,
+      "bounds": {
+        "x_min": -3.594,
+        "x_max": 22.027,
+        "y_min": -30.739,
+        "y_max": 9.13,
+        "z_min": -1.916,
+        "z_max": 5.393
+      },
+      "z_distribution": {
+        "0-1m": {
+          "count": 152,
+          "pct": 2.89
+        },
+        "1-2m": {
+          "count": 801,
+          "pct": 15.21
+        },
+        "2-3m": {
+          "count": 1171,
+          "pct": 22.24
+        },
+        "3-4m": {
+          "count": 876,
+          "pct": 16.64
+        },
+        "4-5m": {
+          "count": 578,
+          "pct": 10.98
+        },
+        "5-6m": {
+          "count": 1443,
+          "pct": 27.41
+        },
+        "6-7m": {
+          "count": 243,
+          "pct": 4.62
+        },
+        "7-8m": {
+          "count": 1,
+          "pct": 0.02
+        },
+        "8-9m": {
+          "count": 0,
+          "pct": 0.0
+        }
+      },
+      "xy_footprint_m2": 1021.48,
+      "point_density_pts_m3": 0.71
+    },
+    "OUTLIER": {
+      "count": 578,
+      "pct": 5.23,
+      "bounds": {
+        "x_min": -5.055,
+        "x_max": 22.972,
+        "y_min": -31.373,
+        "y_max": 9.564,
+        "z_min": -1.647,
+        "z_max": 5.111
+      },
+      "z_distribution": {
+        "0-1m": {
+          "count": 24,
+          "pct": 4.15
+        },
+        "1-2m": {
+          "count": 57,
+          "pct": 9.86
+        },
+        "2-3m": {
+          "count": 108,
+          "pct": 18.69
+        },
+        "3-4m": {
+          "count": 119,
+          "pct": 20.59
+        },
+        "4-5m": {
+          "count": 147,
+          "pct": 25.43
+        },
+        "5-6m": {
+          "count": 100,
+          "pct": 17.3
+        },
+        "6-7m": {
+          "count": 22,
+          "pct": 3.81
+        },
+        "7-8m": {
+          "count": 1,
+          "pct": 0.17
+        },
+        "8-9m": {
+          "count": 0,
+          "pct": 0.0
+        }
+      },
+      "xy_footprint_m2": 1147.34,
+      "point_density_pts_m3": 0.07
+    }
+  },
+  "score_distribution": {
+    "min": 0.0135,
+    "p05": 0.2427,
+    "p10": 0.2962,
+    "p25": 0.4223,
+    "median": 0.5874,
+    "p75": 0.7256,
+    "p90": 0.8077,
+    "p95": 0.8461,
+    "max": 0.9821
+  },
+  "feature_distributions_global": {
+    "planarity": {
+      "raw": {
+        "min": 0.00415,
+        "p05": 0.116763,
+        "median": 0.430896,
+        "p95": 0.796686,
+        "max": 0.989789,
+        "mean": 0.441605,
+        "std": 0.21016
+      },
+      "normalized": {
+        "min": 0.0,
+        "p05": 0.053122,
+        "median": 0.451608,
+        "p95": 0.915622,
+        "max": 1.0,
+        "mean": 0.464815,
+        "std": 0.263217
+      }
+    },
+    "roughness": {
+      "raw": {
+        "min": 0.000337,
+        "p05": 0.001924,
+        "median": 0.028691,
+        "p95": 0.117974,
+        "max": 0.26337,
+        "mean": 0.039326,
+        "std": 0.038368
+      },
+      "normalized": {
+        "min": 0.0,
+        "p05": 0.195966,
+        "median": 0.810024,
+        "p95": 0.994118,
+        "max": 1.0,
+        "mean": 0.741101,
+        "std": 0.248654
+      }
+    },
+    "normal_consistency": {
+      "raw": {
+        "min": 0.0,
+        "p05": 0.287363,
+        "median": 9.44511,
+        "p95": 25.874737,
+        "max": 90.0,
+        "mean": 11.647353,
+        "std": 12.33144
+      },
+      "normalized": {
+        "min": 0.0,
+        "p05": 0.120845,
+        "median": 0.67908,
+        "p95": 0.990236,
+        "max": 1.0,
+        "mean": 0.631863,
+        "std": 0.292257
+      }
+    },
+    "density": {
+      "raw": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 6.0,
+        "p95": 19.0,
+        "max": 45.0,
+        "mean": 7.276496,
+        "std": 5.953148
+      },
+      "normalized": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.25,
+        "p95": 0.791667,
+        "max": 1.0,
+        "mean": 0.298104,
+        "std": 0.228413
+      }
+    },
+    "color": {
+      "raw": {
+        "min": 0.367347,
+        "p05": 0.557775,
+        "median": 0.673729,
+        "p95": 0.703672,
+        "max": 0.884793,
+        "mean": 0.657851,
+        "std": 0.0464
+      },
+      "normalized": {
+        "min": 0.0,
+        "p05": 0.160654,
+        "median": 0.790569,
+        "p95": 0.953234,
+        "max": 1.0,
+        "mean": 0.706245,
+        "std": 0.238295
+      }
+    },
+    "spatial_context": {
+      "raw": {
+        "min": 0.065506,
+        "p05": 0.226742,
+        "median": 0.467629,
+        "p95": 0.659648,
+        "max": 0.766519,
+        "mean": 0.453194,
+        "std": 0.138997
+      },
+      "normalized": {
+        "min": 0.0,
+        "p05": 0.064646,
+        "median": 0.553678,
+        "p95": 0.943502,
+        "max": 1.0,
+        "mean": 0.525101,
+        "std": 0.277361
+      }
+    }
+  },
+  "feature_distributions_per_class": {
+    "BUILDING": {
+      "count": 4299,
+      "planarity_raw": {
+        "min": 0.219563,
+        "p05": 0.366426,
+        "median": 0.617985,
+        "p95": 0.865322,
+        "max": 0.989789,
+        "mean": 0.618532,
+        "std": 0.148971
+      },
+      "planarity_norm": {
+        "min": 0.183526,
+        "p05": 0.369826,
+        "median": 0.688934,
+        "p95": 1.0,
+        "max": 1.0,
+        "mean": 0.687036,
+        "std": 0.184101
+      },
+      "roughness_raw": {
+        "min": 0.000337,
+        "p05": 0.001148,
+        "median": 0.007885,
+        "p95": 0.031898,
+        "max": 0.085022,
+        "mean": 0.012033,
+        "std": 0.01075
+      },
+      "roughness_norm": {
+        "min": 0.422597,
+        "p05": 0.787971,
+        "median": 0.953124,
+        "p95": 0.99946,
+        "max": 1.0,
+        "mean": 0.924523,
+        "std": 0.073857
+      },
+      "normal_consistency_raw": {
+        "min": 0.0,
+        "p05": 0.292358,
+        "median": 3.139963,
+        "p95": 14.790026,
+        "max": 23.94972,
+        "mean": 4.832155,
+        "std": 4.590187
+      },
+      "normal_consistency_norm": {
+        "min": 0.186252,
+        "p05": 0.497474,
+        "median": 0.893312,
+        "p95": 0.990066,
+        "max": 1.0,
+        "mean": 0.835816,
+        "std": 0.155962
+      },
+      "density_raw": {
+        "min": 0.0,
+        "p05": 2.0,
+        "median": 8.0,
+        "p95": 18.1,
+        "max": 30.0,
+        "mean": 9.004187,
+        "std": 4.771443
+      },
+      "density_norm": {
+        "min": 0.0,
+        "p05": 0.083333,
+        "median": 0.333333,
+        "p95": 0.754167,
+        "max": 1.0,
+        "mean": 0.374622,
+        "std": 0.196882
+      },
+      "color_raw": {
+        "min": 0.557692,
+        "p05": 0.665321,
+        "median": 0.680365,
+        "p95": 0.707619,
+        "max": 0.833333,
+        "mean": 0.682006,
+        "std": 0.016355
+      },
+      "color_norm": {
+        "min": 0.160205,
+        "p05": 0.744893,
+        "median": 0.826621,
+        "p95": 0.974676,
+        "max": 1.0,
+        "mean": 0.834029,
+        "std": 0.084609
+      },
+      "spatial_context_raw": {
+        "min": 0.242483,
+        "p05": 0.428682,
+        "median": 0.580319,
+        "p95": 0.688099,
+        "max": 0.766519,
+        "mean": 0.572925,
+        "std": 0.078079
+      },
+      "spatial_context_norm": {
+        "min": 0.096603,
+        "p05": 0.474611,
+        "median": 0.782455,
+        "p95": 1.0,
+        "max": 1.0,
+        "mean": 0.765315,
+        "std": 0.154871
+      }
+    },
+    "VEGETATION": {
+      "count": 907,
+      "planarity_raw": {
+        "min": 0.00415,
+        "p05": 0.040481,
+        "median": 0.161808,
+        "p95": 0.370455,
+        "max": 0.573919,
+        "mean": 0.178672,
+        "std": 0.100261
+      },
+      "planarity_norm": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.110262,
+        "p95": 0.374936,
+        "max": 0.633036,
+        "mean": 0.136319,
+        "std": 0.121205
+      },
+      "roughness_raw": {
+        "min": 0.030567,
+        "p05": 0.055001,
+        "median": 0.096422,
+        "p95": 0.16067,
+        "max": 0.251437,
+        "mean": 0.100603,
+        "std": 0.033036
+      },
+      "roughness_norm": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.344196,
+        "p95": 0.629075,
+        "max": 0.797124,
+        "mean": 0.33002,
+        "std": 0.193553
+      },
+      "normal_consistency_raw": {
+        "min": 0.0,
+        "p05": 8.646566,
+        "median": 21.567948,
+        "p95": 29.298458,
+        "max": 36.902417,
+        "mean": 20.693704,
+        "std": 6.325545
+      },
+      "normal_consistency_norm": {
+        "min": 0.0,
+        "p05": 0.004516,
+        "median": 0.267178,
+        "p95": 0.706213,
+        "max": 1.0,
+        "mean": 0.299921,
+        "std": 0.209806
+      },
+      "density_raw": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 2.0,
+        "p95": 8.0,
+        "max": 19.0,
+        "mean": 2.889746,
+        "std": 2.578209
+      },
+      "density_norm": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.083333,
+        "p95": 0.333333,
+        "max": 0.791667,
+        "mean": 0.120406,
+        "std": 0.107425
+      },
+      "color_raw": {
+        "min": 0.367347,
+        "p05": 0.527061,
+        "median": 0.615819,
+        "p95": 0.67888,
+        "max": 0.722222,
+        "mean": 0.612981,
+        "std": 0.051571
+      },
+      "color_norm": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.475977,
+        "p95": 0.818553,
+        "max": 1.0,
+        "mean": 0.469027,
+        "std": 0.259336
+      },
+      "spatial_context_raw": {
+        "min": 0.113215,
+        "p05": 0.179682,
+        "median": 0.272961,
+        "p95": 0.39307,
+        "max": 0.533284,
+        "mean": 0.277828,
+        "std": 0.06765
+      },
+      "spatial_context_norm": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.158477,
+        "p95": 0.402315,
+        "max": 0.686966,
+        "mean": 0.172676,
+        "std": 0.130588
+      }
+    },
+    "UNKNOWN": {
+      "count": 5265,
+      "planarity_raw": {
+        "min": 0.007487,
+        "p05": 0.127619,
+        "median": 0.339691,
+        "p95": 0.623317,
+        "max": 0.862931,
+        "mean": 0.355598,
+        "std": 0.151617
+      },
+      "planarity_norm": {
+        "min": 0.0,
+        "p05": 0.066893,
+        "median": 0.335911,
+        "p95": 0.695698,
+        "max": 0.999656,
+        "mean": 0.356462,
+        "std": 0.191593
+      },
+      "roughness_raw": {
+        "min": 0.000489,
+        "p05": 0.003689,
+        "median": 0.04011,
+        "p95": 0.092039,
+        "max": 0.209997,
+        "mean": 0.043188,
+        "std": 0.025911
+      },
+      "roughness_norm": {
+        "min": 0.0,
+        "p05": 0.374336,
+        "median": 0.731489,
+        "p95": 0.981983,
+        "max": 1.0,
+        "mean": 0.710546,
+        "std": 0.177045
+      },
+      "normal_consistency_raw": {
+        "min": 0.0,
+        "p05": 1.121124,
+        "median": 14.723509,
+        "p95": 25.427225,
+        "max": 33.94146,
+        "mean": 13.933212,
+        "std": 7.649816
+      },
+      "normal_consistency_norm": {
+        "min": 0.0,
+        "p05": 0.136051,
+        "median": 0.499734,
+        "p95": 0.961907,
+        "max": 1.0,
+        "mean": 0.52688,
+        "std": 0.259271
+      },
+      "density_raw": {
+        "min": 0.0,
+        "p05": 1.0,
+        "median": 6.0,
+        "p95": 21.0,
+        "max": 45.0,
+        "mean": 7.376068,
+        "std": 6.606932
+      },
+      "density_norm": {
+        "min": 0.0,
+        "p05": 0.041667,
+        "median": 0.25,
+        "p95": 0.875,
+        "max": 1.0,
+        "mean": 0.297119,
+        "std": 0.238482
+      },
+      "color_raw": {
+        "min": 0.404255,
+        "p05": 0.55103,
+        "median": 0.670732,
+        "p95": 0.699248,
+        "max": 0.884793,
+        "mean": 0.649654,
+        "std": 0.049336
+      },
+      "color_norm": {
+        "min": 0.0,
+        "p05": 0.124013,
+        "median": 0.774287,
+        "p95": 0.929201,
+        "max": 1.0,
+        "mean": 0.662442,
+        "std": 0.252446
+      },
+      "spatial_context_raw": {
+        "min": 0.065506,
+        "p05": 0.225194,
+        "median": 0.399966,
+        "p95": 0.573686,
+        "max": 0.702943,
+        "mean": 0.398262,
+        "std": 0.111318
+      },
+      "spatial_context_norm": {
+        "min": 0.0,
+        "p05": 0.061505,
+        "median": 0.416314,
+        "p95": 0.768987,
+        "max": 1.0,
+        "mean": 0.415118,
+        "std": 0.220962
+      }
+    },
+    "OUTLIER": {
+      "count": 578,
+      "planarity_raw": {
+        "min": 0.012733,
+        "p05": 0.073294,
+        "median": 0.298575,
+        "p95": 0.666448,
+        "max": 0.917414,
+        "mean": 0.321704,
+        "std": 0.176068
+      },
+      "planarity_norm": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.283755,
+        "p95": 0.750412,
+        "max": 1.0,
+        "mean": 0.314451,
+        "std": 0.220728
+      },
+      "roughness_raw": {
+        "min": 0.000605,
+        "p05": 0.026279,
+        "median": 0.109987,
+        "p95": 0.19922,
+        "max": 0.26337,
+        "mean": 0.110986,
+        "std": 0.05244
+      },
+      "roughness_norm": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.250897,
+        "p95": 0.826612,
+        "max": 1.0,
+        "mean": 0.300252,
+        "std": 0.280674
+      },
+      "normal_consistency_raw": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 6.983856,
+        "p95": 90.0,
+        "max": 90.0,
+        "mean": 27.319408,
+        "std": 37.24526
+      },
+      "normal_consistency_norm": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.762707,
+        "p95": 1.0,
+        "max": 1.0,
+        "mean": 0.592087,
+        "std": 0.431501
+      },
+      "density_raw": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.0,
+        "p95": 2.0,
+        "max": 2.0,
+        "mean": 0.403114,
+        "std": 0.592739
+      },
+      "density_norm": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.0,
+        "p95": 0.083333,
+        "max": 0.083333,
+        "mean": 0.016796,
+        "std": 0.024697
+      },
+      "color_raw": {
+        "min": 0.414815,
+        "p05": 0.520749,
+        "median": 0.635104,
+        "p95": 0.693333,
+        "max": 0.788462,
+        "mean": 0.623278,
+        "std": 0.059292
+      },
+      "color_norm": {
+        "min": 0.0,
+        "p05": 0.0,
+        "median": 0.580743,
+        "p95": 0.897069,
+        "max": 1.0,
+        "mean": 0.527068,
+        "std": 0.294731
+      },
+      "spatial_context_raw": {
+        "min": 0.089424,
+        "p05": 0.213834,
+        "median": 0.329864,
+        "p95": 0.505821,
+        "max": 0.638869,
+        "mean": 0.338236,
+        "std": 0.091323
+      },
+      "spatial_context_norm": {
+        "min": 0.0,
+        "p05": 0.038442,
+        "median": 0.273998,
+        "p95": 0.631213,
+        "max": 0.901318,
+        "mean": 0.293326,
+        "std": 0.180825
+      }
+    }
+  },
+  "feature_separation": {
+    "planarity": {
+      "building_median": 0.617985,
+      "vegetation_median": 0.161808,
+      "difference": 0.456177,
+      "expected_trend_present": true,
+      "note": "DIAGNOSTIC ONLY -- not a hard pass/fail test"
+    },
+    "roughness": {
+      "building_median": 0.007885,
+      "vegetation_median": 0.096422,
+      "difference": -0.088537,
+      "expected_trend_present": true,
+      "note": "DIAGNOSTIC ONLY -- not a hard pass/fail test"
+    },
+    "normal_consistency": {
+      "building_median": 3.139963,
+      "vegetation_median": 21.567948,
+      "difference": -18.427985,
+      "expected_trend_present": true,
+      "note": "DIAGNOSTIC ONLY -- not a hard pass/fail test"
+    },
+    "density": {
+      "building_median": 8.0,
+      "vegetation_median": 2.0,
+      "difference": 6.0,
+      "expected_trend_present": true,
+      "note": "DIAGNOSTIC ONLY -- not a hard pass/fail test"
+    },
+    "color": {
+      "building_median": 0.680365,
+      "vegetation_median": 0.615819,
+      "difference": 0.064546,
+      "expected_trend_present": true,
+      "note": "DIAGNOSTIC ONLY -- not a hard pass/fail test"
+    },
+    "spatial_context": {
+      "building_median": 0.580319,
+      "vegetation_median": 0.272961,
+      "difference": 0.307358,
+      "expected_trend_present": true,
+      "note": "DIAGNOSTIC ONLY -- not a hard pass/fail test"
+    }
+  },
+  "spatial_coherence": {
+    "building_point_count": 4299,
+    "component_count": 54,
+    "noise_points_in_building": 44,
+    "largest_component_size": 1427,
+    "largest_component_pct": 33.19,
+    "components": [
+      {
+        "component_id": 3,
+        "point_count": 1427,
+        "pct_of_building": 33.19,
+        "bounds": {
+          "x_min": 0.074,
+          "x_max": 9.566,
+          "y_min": -27.496,
+          "y_max": -16.892,
+          "z_min": -1.681,
+          "z_max": 4.311
+        }
+      },
+      {
+        "component_id": 13,
+        "point_count": 834,
+        "pct_of_building": 19.4,
+        "bounds": {
+          "x_min": 2.445,
+          "x_max": 3.951,
+          "y_min": -4.147,
+          "y_max": 4.617,
+          "z_min": -0.904,
+          "z_max": 3.633
+        }
+      },
+      {
+        "component_id": 24,
+        "point_count": 291,
+        "pct_of_building": 6.77,
+        "bounds": {
+          "x_min": 4.536,
+          "x_max": 11.986,
+          "y_min": -2.788,
+          "y_max": 1.555,
+          "z_min": 3.161,
+          "z_max": 3.345
+        }
+      },
+      {
+        "component_id": 1,
+        "point_count": 224,
+        "pct_of_building": 5.21,
+        "bounds": {
+          "x_min": -0.845,
+          "x_max": -0.25,
+          "y_min": -27.881,
+          "y_max": -23.983,
+          "z_min": -1.527,
+          "z_max": 1.09
+        }
+      },
+      {
+        "component_id": 35,
+        "point_count": 124,
+        "pct_of_building": 2.88,
+        "bounds": {
+          "x_min": 8.401,
+          "x_max": 8.754,
+          "y_min": -21.057,
+          "y_max": -18.63,
+          "z_min": -1.27,
+          "z_max": 1.143
+        }
+      },
+      {
+        "component_id": 38,
+        "point_count": 116,
+        "pct_of_building": 2.7,
+        "bounds": {
+          "x_min": 9.934,
+          "x_max": 11.091,
+          "y_min": -12.2,
+          "y_max": -6.11,
+          "z_min": 3.331,
+          "z_max": 3.55
+        }
+      },
+      {
+        "component_id": 28,
+        "point_count": 111,
+        "pct_of_building": 2.58,
+        "bounds": {
+          "x_min": 5.558,
+          "x_max": 9.212,
+          "y_min": -4.299,
+          "y_max": -3.462,
+          "z_min": 3.757,
+          "z_max": 4.322
+        }
+      },
+      {
+        "component_id": 31,
+        "point_count": 107,
+        "pct_of_building": 2.49,
+        "bounds": {
+          "x_min": 6.356,
+          "x_max": 10.88,
+          "y_min": 2.116,
+          "y_max": 3.196,
+          "z_min": 3.589,
+          "z_max": 4.22
+        }
+      },
+      {
+        "component_id": 22,
+        "point_count": 106,
+        "pct_of_building": 2.47,
+        "bounds": {
+          "x_min": 4.058,
+          "x_max": 6.508,
+          "y_min": 3.46,
+          "y_max": 9.088,
+          "z_min": 3.009,
+          "z_max": 4.506
+        }
+      },
+      {
+        "component_id": 41,
+        "point_count": 98,
+        "pct_of_building": 2.28,
+        "bounds": {
+          "x_min": 10.914,
+          "x_max": 11.459,
+          "y_min": -10.628,
+          "y_max": -7.108,
+          "z_min": -0.291,
+          "z_max": 1.597
+        }
+      }
+    ],
+    "xy_fill_ratio_1m_pct": 26.09
+  },
+  "comparison_with_original": {
+    "original_candidate": {
+      "count": 11049,
+      "bounds": {
+        "x_min": -5.055,
+        "x_max": 22.972,
+        "y_min": -31.373,
+        "y_max": 9.564,
+        "z_min": -1.916,
+        "z_max": 5.449
+      }
+    },
+    "filtered_building": {
+      "count": 4299,
+      "bounds": {
+        "x_min": -3.33,
+        "x_max": 18.767,
+        "y_min": -27.881,
+        "y_max": 9.088,
+        "z_min": -1.681,
+        "z_max": 4.689
+      },
+      "z_range_m": 6.37,
+      "x_range_m": 22.097,
+      "y_range_m": 36.969
+    }
+  },
+  "rgb_assessment": {
+    "available": true,
+    "unique_colors": 10302,
+    "zero_rgb_count": 0,
+    "r_mean": 127.7,
+    "g_mean": 110.9,
+    "b_mean": 87.2,
+    "pipeline": "E57 -> voxel_grid_downsample (averaged per 0.10m voxel) -> DBSCAN indexing",
+    "quality": "PRESENT but voxel-averaged -- usable as secondary evidence only"
+  },
+  "discrepancy_11049_vs_21124": {
+    "current_candidate_count": 11049,
+    "current_candidate_source": "aam_khas_bagh_classified_cloud.json",
+    "current_candidate_id": 3,
+    "mesh_input_point_count": 21124,
+    "mesh_reconstruction_method": "poisson_depth_8",
+    "mesh_source_file": "7csx-ne47_terresterial_lidar.e57",
+    "classified_cloud_timestamp": "2026-09-04T00:52:19.888071",
+    "mesh_timestamp": "2026-09-03T23:33:28.749438",
+    "same_pipeline_run": false,
+    "explanation": "The classified cloud (11,049 pts) was generated AFTER the mesh (21,124 pts). The extraction pipeline was re-run with different sampling/DBSCAN parameters, producing a different candidate. The mesh and cloud are from DIFFERENT pipeline runs."
+  },
+  "quality_flags": [
+    "WARNING: Largest building component <50% of building points"
+  ],
+  "recommended_next_step": "The building point count is moderate. Try Ball Pivoting first with adaptive radii based on local point spacing. If gaps are too large, consider Poisson at depth 6 (lower than 8) with aggressive density trimming."
+}

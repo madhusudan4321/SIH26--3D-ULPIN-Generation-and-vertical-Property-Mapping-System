@@ -1,0 +1,196 @@
+{
+  "dataset_name": "2zz6-k952_aerial",
+  "total_discovered": 18,
+  "valid": 18,
+  "warning": 0,
+  "invalid": 0,
+  "mean_sharpness_score": 1511.52,
+  "resolution_range": {
+    "min_w": 4864,
+    "max_w": 4864,
+    "min_h": 3648,
+    "max_h": 3648
+  },
+  "images": [
+    {
+      "filename": "DR-HAF-IVD-1-S5-P1.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P1.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1581.41,
+      "brightness_score": 136.76,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P10.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P10.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1712.25,
+      "brightness_score": 149.11,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P11.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P11.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1814.31,
+      "brightness_score": 145.55,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P12.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P12.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1695.31,
+      "brightness_score": 145.63,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P13.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P13.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1680.06,
+      "brightness_score": 138.88,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P14.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P14.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1524.74,
+      "brightness_score": 136.19,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P15.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P15.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1465.44,
+      "brightness_score": 136.28,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P16.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P16.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1585.39,
+      "brightness_score": 137.28,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P17.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P17.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1494.49,
+      "brightness_score": 139.21,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P18.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P18.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1402.17,
+      "brightness_score": 132.31,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P2.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P2.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1359.5,
+      "brightness_score": 146.18,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P3.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P3.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1382.5,
+      "brightness_score": 149.29,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P4.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P4.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1453.63,
+      "brightness_score": 155.95,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P5.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P5.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1393.62,
+      "brightness_score": 152.93,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P6.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P6.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1422.46,
+      "brightness_score": 153.16,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P7.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P7.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1499.31,
+      "brightness_score": 160.14,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P8.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P8.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1328.33,
+      "brightness_score": 159.79,
+      "width": 4864,
+      "height": 3648
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P9.JPG",
+      "path": "D:\\SIH Data\\2zz6-k952_photogrammetry_aerial\\DR-HAF-IVD-1-S5-P9.JPG",
+      "status": "VALID",
+      "reasons": [],
+      "sharpness_score": 1412.4,
+      "brightness_score": 156.33,
+      "width": 4864,
+      "height": 3648
+    }
+  ]
+}

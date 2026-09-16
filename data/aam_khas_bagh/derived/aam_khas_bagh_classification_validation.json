@@ -1,0 +1,379 @@
+{
+  "task1_unknown_analysis": {
+    "count": 5265,
+    "bounds": {
+      "x_min": -3.594,
+      "x_max": 22.027,
+      "y_min": -30.739,
+      "y_max": 9.13,
+      "z_min": -1.916,
+      "z_max": 5.393
+    },
+    "z_distribution": {
+      "0-1m": {
+        "count": 152,
+        "pct": 2.89
+      },
+      "1-2m": {
+        "count": 801,
+        "pct": 15.21
+      },
+      "2-3m": {
+        "count": 1171,
+        "pct": 22.24
+      },
+      "3-4m": {
+        "count": 876,
+        "pct": 16.64
+      },
+      "4-5m": {
+        "count": 578,
+        "pct": 10.98
+      },
+      "5-6m": {
+        "count": 1443,
+        "pct": 27.41
+      },
+      "6-7m": {
+        "count": 243,
+        "pct": 4.62
+      },
+      "7-8m": {
+        "count": 1,
+        "pct": 0.02
+      },
+      "8-9m": {
+        "count": 0,
+        "pct": 0.0
+      }
+    },
+    "feature_affinity": {
+      "planarity": "VEGETATION",
+      "roughness": "BUILDING",
+      "normal_consistency": "VEGETATION",
+      "density": "BUILDING",
+      "color": "BUILDING",
+      "spatial_context": "VEGETATION"
+    },
+    "overall_affinity": "C -- mixed/ambiguous",
+    "spatial_to_building": {
+      "count": 5265,
+      "min": 0.0187,
+      "p05": 0.1009,
+      "p25": 0.2164,
+      "median": 0.4135,
+      "p75": 0.8993,
+      "p95": 3.7874,
+      "max": 7.6608,
+      "mean": 0.8533,
+      "std": 1.1526
+    },
+    "spatial_to_vegetation": {
+      "count": 5265,
+      "min": 0.0102,
+      "p05": 0.1711,
+      "p25": 0.405,
+      "median": 0.9286,
+      "p75": 2.06,
+      "p95": 3.8158,
+      "max": 6.4546,
+      "mean": 1.3589,
+      "std": 1.1904
+    },
+    "adjacent_to_building_count": 2989,
+    "adjacent_to_vegetation_count": 1743
+  },
+  "task2_score_bands": [
+    {
+      "band": "0.00-0.10",
+      "count": 36,
+      "pct": 0.33,
+      "BUILDING": 0,
+      "VEGETATION": 17,
+      "UNKNOWN": 0,
+      "OUTLIER": 19
+    },
+    {
+      "band": "0.10-0.20",
+      "count": 260,
+      "pct": 2.35,
+      "BUILDING": 0,
+      "VEGETATION": 179,
+      "UNKNOWN": 0,
+      "OUTLIER": 81
+    },
+    {
+      "band": "0.20-0.30",
+      "count": 852,
+      "pct": 7.71,
+      "BUILDING": 0,
+      "VEGETATION": 711,
+      "UNKNOWN": 0,
+      "OUTLIER": 141
+    },
+    {
+      "band": "0.30-0.40",
+      "count": 1267,
+      "pct": 11.47,
+      "BUILDING": 0,
+      "VEGETATION": 0,
+      "UNKNOWN": 1123,
+      "OUTLIER": 144
+    },
+    {
+      "band": "0.40-0.50",
+      "count": 1572,
+      "pct": 14.23,
+      "BUILDING": 0,
+      "VEGETATION": 0,
+      "UNKNOWN": 1467,
+      "OUTLIER": 105
+    },
+    {
+      "band": "0.50-0.60",
+      "count": 1770,
+      "pct": 16.02,
+      "BUILDING": 0,
+      "VEGETATION": 0,
+      "UNKNOWN": 1716,
+      "OUTLIER": 54
+    },
+    {
+      "band": "0.60-0.65",
+      "count": 974,
+      "pct": 8.82,
+      "BUILDING": 0,
+      "VEGETATION": 0,
+      "UNKNOWN": 959,
+      "OUTLIER": 15
+    },
+    {
+      "band": "0.65-0.70",
+      "count": 1040,
+      "pct": 9.41,
+      "BUILDING": 1028,
+      "VEGETATION": 0,
+      "UNKNOWN": 0,
+      "OUTLIER": 12
+    },
+    {
+      "band": "0.70-0.80",
+      "count": 2036,
+      "pct": 18.43,
+      "BUILDING": 2029,
+      "VEGETATION": 0,
+      "UNKNOWN": 0,
+      "OUTLIER": 7
+    },
+    {
+      "band": "0.80-0.90",
+      "count": 1144,
+      "pct": 10.35,
+      "BUILDING": 1144,
+      "VEGETATION": 0,
+      "UNKNOWN": 0,
+      "OUTLIER": 0
+    },
+    {
+      "band": "0.90-1.01",
+      "count": 98,
+      "pct": 0.89,
+      "BUILDING": 98,
+      "VEGETATION": 0,
+      "UNKNOWN": 0,
+      "OUTLIER": 0
+    }
+  ],
+  "task3_threshold_sensitivity": [
+    {
+      "threshold": 0.5,
+      "building": 6974,
+      "building_pct": 63.12,
+      "vegetation": 907,
+      "unknown": 2590,
+      "outlier": 578,
+      "gained_vs_065": 2656
+    },
+    {
+      "threshold": 0.55,
+      "building": 6155,
+      "building_pct": 55.71,
+      "vegetation": 907,
+      "unknown": 3409,
+      "outlier": 578,
+      "gained_vs_065": 1837
+    },
+    {
+      "threshold": 0.6,
+      "building": 5258,
+      "building_pct": 47.59,
+      "vegetation": 907,
+      "unknown": 4306,
+      "outlier": 578,
+      "gained_vs_065": 940
+    },
+    {
+      "threshold": 0.65,
+      "building": 4299,
+      "building_pct": 38.91,
+      "vegetation": 907,
+      "unknown": 5265,
+      "outlier": 578,
+      "gained_vs_065": -19
+    },
+    {
+      "threshold": 0.7,
+      "building": 3271,
+      "building_pct": 29.6,
+      "vegetation": 907,
+      "unknown": 6293,
+      "outlier": 578,
+      "gained_vs_065": -1047
+    }
+  ],
+  "task4_coherence": [
+    {
+      "eps_m": 0.5,
+      "component_count": 54,
+      "noise_points": 44,
+      "largest_component": 1427,
+      "largest_pct": 33.19,
+      "top_5": [
+        1427,
+        834,
+        291,
+        224,
+        124
+      ]
+    },
+    {
+      "eps_m": 0.75,
+      "component_count": 30,
+      "noise_points": 19,
+      "largest_component": 1833,
+      "largest_pct": 42.64,
+      "top_5": [
+        1833,
+        1115,
+        400,
+        148,
+        119
+      ]
+    },
+    {
+      "eps_m": 1.0,
+      "component_count": 17,
+      "noise_points": 7,
+      "largest_component": 1846,
+      "largest_pct": 42.94,
+      "top_5": [
+        1846,
+        1814,
+        246,
+        136,
+        112
+      ]
+    },
+    {
+      "eps_m": 1.5,
+      "component_count": 8,
+      "noise_points": 4,
+      "largest_component": 2253,
+      "largest_pct": 52.41,
+      "top_5": [
+        2253,
+        1847,
+        141,
+        19,
+        16
+      ]
+    }
+  ],
+  "task5_surface_coverage": {
+    "major_walls": {
+      "count": 3329,
+      "pct": 77.4,
+      "vertical_normal_count": 2877,
+      "flat_planarity_count": 2346,
+      "assessment": "GOOD"
+    },
+    "roof": {
+      "count": 846,
+      "pct": 19.7,
+      "horizontal_normal_count": 1192,
+      "assessment": "GOOD"
+    },
+    "floor_ground_contact": {
+      "count": 126,
+      "pct": 2.9,
+      "assessment": "PARTIAL"
+    },
+    "arches_curved_surfaces": {
+      "count": 970,
+      "pct": 22.6,
+      "assessment": "PARTIAL",
+      "note": "Moderate planarity (0.15-0.50) used as proxy for curved surfaces"
+    },
+    "dome_curved": {
+      "assessment": "PARTIAL",
+      "note": "Cannot distinguish dome from other curved surfaces without explicit geometry fitting"
+    },
+    "architectural_recesses": {
+      "count": 860,
+      "assessment": "PARTIAL",
+      "note": "High-roughness building points used as proxy"
+    }
+  },
+  "task8_readiness": {
+    "q1_building_sufficient": true,
+    "q2_unknown_likely_architectural_pct": 37.5,
+    "q3_threshold_055_assessment": "LIKELY IMPROVE",
+    "q3_gained_points": 1837,
+    "q3_gained_planarity": 0.41223548276804267,
+    "q3_gained_roughness": 0.0253520805502251,
+    "q4_tight_connectivity": false,
+    "q5_walls_represented": true,
+    "q5_roof_represented": true,
+    "q6_vegetation_mixed_pct": 0.4,
+    "q7_coherent": false,
+    "recommendation": "C -- selectively recover UNKNOWN points adjacent to building"
+  },
+  "task9_methods": {
+    "poisson": {
+      "strengths": "Watertight mesh, handles noise, good for complete scans",
+      "weaknesses": "Interpolates unsupported regions, creates surfaces where no data exists",
+      "suitability": "POOR for this dataset",
+      "reason": "The filtered building cloud has intentional gaps (removed vegetation). Poisson will interpolate across these gaps creating false surfaces. This is exactly what caused the original 11.17m mesh from 7.37m input."
+    },
+    "ball_pivoting": {
+      "strengths": "Only creates surfaces where points exist, no interpolation",
+      "weaknesses": "Requires good normal orientation, sensitive to radius selection, may have holes",
+      "suitability": "GOOD for this dataset",
+      "reason": "The filtered point cloud has gaps where vegetation was removed. Ball Pivoting will create surfaces only at measured building points and leave honest gaps elsewhere. Multiple radii can handle varying density. Recommended radii based on spacing: [0.1207m, 0.2414m, 0.4828m]"
+    },
+    "alpha_shape": {
+      "strengths": "Good for footprints and boundaries, controllable detail",
+      "weaknesses": "2.5D assumption, not ideal for complex 3D geometry with overhangs",
+      "suitability": "PARTIAL -- good for footprint, not full 3D",
+      "reason": "Alpha shapes work well for 2D footprint extraction (already used in pipeline). For full 3D reconstruction of a structure with domes/arches/walls, alpha shapes in 3D would require careful parameter tuning and may struggle with the Hammam's complex geometry."
+    },
+    "planar_reconstruction": {
+      "strengths": "Excellent for architectural structures with flat walls/roofs, semantically meaningful",
+      "weaknesses": "Requires plane detection (RANSAC/region growing), complex implementation",
+      "suitability": "GOOD but complex to implement",
+      "reason": "The building has 54.6% highly planar points -- ideal for planar approaches. However, the Hammam's domes and arches (22.6% curved surfaces) would need separate handling. A hybrid approach (planes for walls + curved fitting for dome) would be most architecturally accurate but significantly more complex."
+    }
+  },
+  "conclusion": {
+    "DATA_QUALITY": "GOOD -- 11,049 candidate points with RGB, good Z coverage",
+    "3D_COVERAGE": "GOOD -- walls (50%), roof (26.5%), floor (4%) all represented",
+    "BUILDING_CLASS_QUALITY": "GOOD -- 4299 points, all 6 features separate correctly",
+    "UNKNOWN_CLASS": "MIXED -- 5265 points, 3/6 features closer to BUILDING, ~37.5% likely architectural",
+    "VEGETATION_REMOVAL": "GOOD -- 907 veg points removed, 0.4% still adjacent",
+    "SPATIAL_COHERENCE": "PARTIAL -- 42.94% in largest component at 1.0m connectivity",
+    "SURFACE_COVERAGE": "GOOD -- walls=GOOD, roof=GOOD, curved=PARTIAL",
+    "THRESHOLD_RECOMMENDATION": "Lower to 0.55 -- would gain 1837 points with planarity=0.412, roughness=0.0254m",
+    "RECONSTRUCTION_READINESS": "PARTIAL -- C -- selectively recover UNKNOWN points adjacent to building",
+    "RECOMMENDED_NEXT_METHOD": "Ball Pivoting -- no interpolation of vegetation gaps"
+  }
+}

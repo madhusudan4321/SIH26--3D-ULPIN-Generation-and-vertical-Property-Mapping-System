@@ -34,10 +34,29 @@ frontend/public/cesium/
 *.log
 npm-debug.log*
 
-# Data (large files)
+# Data (large files & 3D photogrammetry/LiDAR outputs)
 data/processed/
 data/aam_khas_bagh/lidar/
 *.tif
 *.laz
 *.las
 *.e57
+*.ply
+*.bin
+*.db
+*.sqlite
+*.sqlite3
+
+# Storage & Runtime Uploads
+backend/storage/uploads/*
+!backend/storage/uploads/.gitkeep
+backend/storage/models/*
+!backend/storage/models/.gitkeep
+
+# Python Caches & Testing
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+

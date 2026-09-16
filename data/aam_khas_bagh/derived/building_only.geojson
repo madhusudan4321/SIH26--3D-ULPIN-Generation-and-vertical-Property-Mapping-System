@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "derived_from_lidar": true,
+  "source_type": "lidar_extracted",
+  "georeferenced": false,
+  "crs": "AAM_KHAS_BAGH_LOCAL",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "building_id": "AAM_KHAS_BAGH_HAMMAM",
+        "height_m": 6.14,
+        "area_m2": 8407.84,
+        "perimeter_m": 355.51,
+        "derived_from_lidar": true,
+        "source_type": "lidar_extracted",
+        "georeferenced": false
+      },
+      "geometry": null
+    }
+  ]
+}

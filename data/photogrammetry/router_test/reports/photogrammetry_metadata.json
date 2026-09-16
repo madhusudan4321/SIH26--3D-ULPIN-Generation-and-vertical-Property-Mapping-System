@@ -1,0 +1,50 @@
+{
+  "dataset_name": "router_test",
+  "total_images": 3,
+  "cameras_detected": [],
+  "single_camera_consistent": true,
+  "gps_metadata_available": false,
+  "gps_image_count": 0,
+  "gps_image_percentage": 0.0,
+  "georeferencing": {
+    "photogrammetry_georeferenced": false,
+    "coordinate_frame": "PHOTOGRAMMETRIC_LOCAL",
+    "crs": null,
+    "note": "EXIF GPS metadata present but does NOT constitute authoritative georeferencing. Requires GCP alignment or explicit geo-registration."
+  },
+  "exif_details": [
+    {
+      "filename": "drone_001.jpg",
+      "camera_make": null,
+      "camera_model": null,
+      "focal_length_mm": null,
+      "timestamp": null,
+      "has_gps": false,
+      "latitude": null,
+      "longitude": null,
+      "altitude_m": null
+    },
+    {
+      "filename": "drone_002.jpg",
+      "camera_make": null,
+      "camera_model": null,
+      "focal_length_mm": null,
+      "timestamp": null,
+      "has_gps": false,
+      "latitude": null,
+      "longitude": null,
+      "altitude_m": null
+    },
+    {
+      "filename": "drone_corrupt.jpg",
+      "camera_make": null,
+      "camera_model": null,
+      "focal_length_mm": null,
+      "timestamp": null,
+      "has_gps": false,
+      "latitude": null,
+      "longitude": null,
+      "altitude_m": null
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "dataset": {
+    "name": "router_test",
+    "image_directory": "C:\\Users\\Ashwani\\AppData\\Local\\Temp\\tmp8pcg80ig\\drone_images",
+    "pipeline_status": "DRY_RUN",
+    "timestamp": "2026-09-15T17:27:32.356080+00:00"
+  },
+  "images": {
+    "total_discovered": 3,
+    "valid": 0,
+    "warning": 2,
+    "invalid": 1,
+    "resolution_range": {
+      "min_w": 800,
+      "max_w": 800,
+      "min_h": 600,
+      "max_h": 600
+    },
+    "mean_sharpness_score": 0.0
+  },
+  "exif": {
+    "cameras_detected": [],
+    "gps_metadata_available": false,
+    "gps_image_count": 0,
+    "gps_image_percentage": 0.0
+  },
+  "georeferencing": {
+    "photogrammetry_georeferenced": false,
+    "coordinate_frame": "PHOTOGRAMMETRIC_LOCAL",
+    "crs": null,
+    "note": "EXIF GPS metadata present but does NOT constitute authoritative georeferencing. Requires GCP alignment or explicit geo-registration."
+  },
+  "colmap": {
+    "installed": true,
+    "version": "COLMAP 4.2.0 (Commit be5e291 on 2026-08-31 with CUDA)",
+    "cuda_available": true,
+    "colmap_path": "D:\\colmap-x64-windows-cuda\\bin\\colmap.exe"
+  },
+  "sfm": {
+    "model_exists": false,
+    "total_images": 3,
+    "registered_images": 0,
+    "registration_percentage": 0.0,
+    "total_components": 0,
+    "largest_component_images": 0,
+    "largest_component_percentage": 0.0,
+    "sparse_points": 0,
+    "observations_per_point_mean": 0.0,
+    "mean_track_length": 0.0,
+    "mean_reprojection_error_px": 0.0,
+    "median_reprojection_error_px": 0.0,
+    "max_reprojection_error_px": 0.0,
+    "weakly_connected_images": [],
+    "camera_models": []
+  },
+  "mvs": {
+    "status": "NOT_RUN",
+    "dense_point_count": 0,
+    "dense_ply_path": null
+  },
+  "pointcloud": {
+    "status": "NOT_FOUND",
+    "raw_point_count": 0,
+    "processed_point_count": 0,
+    "xyz_bounds": null,
+    "has_rgb": false,
+    "mean_nn_distance_m": 0.0,
+    "voxel_size_applied": null,
+    "outliers_removed": 0,
+    "raw_ply_path": null,
+    "processed_ply_path": null
+  },
+  "readiness": "NOT_READY",
+  "blocking_reasons": [],
+  "warnings": [
+    "1 corrupted or unreadable images were detected and excluded.",
+    "2 images flagged with quality warnings (blur, exposure, or duplicate).",
+    "No EXIF GPS metadata detected in images. Photogrammetry cloud is in PHOTOGRAMMETRIC_LOCAL frame.",
+    "Pipeline executed in dry-run mode. No reconstruction artifacts generated."
+  ]
+}

@@ -20,6 +20,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import PointCloudCanvas from "./PointCloudCanvas";
+import LidarErrorBoundary from "./LidarErrorBoundary";
 
 export default function LocalLidarViewer({ onClose }) {
   const [sampleData, setSampleData] = useState(null);
@@ -72,7 +73,7 @@ export default function LocalLidarViewer({ onClose }) {
 
     // 1. Metadata report
     fetch("/api/lidar/aam_khas_bagh/report")
-      .then((r) => r.ok ? r.json() : null)
+      .then((r) => (r.ok ? r.json() : null))
       .then((rpt) => {
         if (!isMounted) return;
         setReport(rpt);
@@ -82,32 +83,39 @@ export default function LocalLidarViewer({ onClose }) {
         setScanVisibility(vis);
       })
       .catch((err) => {
-        if (isMounted) { setError(err.message); setLoading(false); }
+        if (isMounted) {
+          setError(err.message);
+          setLoading(false);
+        }
       });
 
     // 2. Point cloud sample
     fetch("/api/lidar/aam_khas_bagh/sample")
-      .then((r) => r.ok ? r.json() : null)
+      .then((r) => (r.ok ? r.json() : null))
       .then((sample) => {
         if (!isMounted) return;
         setSampleData(sample);
         setLoadingPoints(false);
       })
-      .catch(() => { if (isMounted) setLoadingPoints(false); });
+      .catch(() => {
+        if (isMounted) setLoadingPoints(false);
+      });
 
     // 3. Classified cloud & extracted building
     Promise.all([
-      fetch("/api/lidar/aam_khas_bagh/classified_cloud").then((r) => r.ok ? r.json() : null),
-      fetch("/api/lidar/aam_khas_bagh/extracted_building").then((r) => r.ok ? r.json() : null),
-    ]).then(([classified, bld]) => {
-      if (!isMounted) return;
-      if (classified) setClassifiedData(classified);
-      if (bld) setExtractedBuilding(bld);
-    }).catch((e) => console.warn("Extraction data load:", e));
+      fetch("/api/lidar/aam_khas_bagh/classified_cloud").then((r) => (r.ok ? r.json() : null)),
+      fetch("/api/lidar/aam_khas_bagh/extracted_building").then((r) => (r.ok ? r.json() : null)),
+    ])
+      .then(([classified, bld]) => {
+        if (!isMounted) return;
+        if (classified) setClassifiedData(classified);
+        if (bld) setExtractedBuilding(bld);
+      })
+      .catch((e) => console.warn("Extraction data load:", e));
 
     // 4. Mesh metadata & mesh URL
     fetch("/api/lidar/aam_khas_bagh/mesh_metadata")
-      .then((r) => r.ok ? r.json() : null)
+      .then((r) => (r.ok ? r.json() : null))
       .then((meta) => {
         if (!isMounted) return;
         if (meta && meta.status === "SUCCESS") {
@@ -119,7 +127,9 @@ export default function LocalLidarViewer({ onClose }) {
       })
       .catch((e) => console.warn("Mesh metadata load:", e));
 
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const toggleScan = useCallback((idx) => {
@@ -202,27 +212,28 @@ export default function LocalLidarViewer({ onClose }) {
                     <p style={{ color: "#38bdf8", fontWeight: 600 }}>Streaming Local Point Cloud...</p>
                   </div>
                 ) : sampleData ? (
-                  <PointCloudCanvas
-                    sampleData={sampleData}
-                    classifiedData={classifiedData}
-                    extractedBuilding={currentBld}
-                    scanVisibility={scanVisibility}
-                    showAxes={showAxes}
-                    showScanners={showScanners}
-                    pointSize={pointSize}
-                    showRawCloud={showRawCloud}
-                    showGroundPoints={showGroundPoints}
-                    showNonGroundPoints={showNonGroundPoints}
-                    showBuildingPoints={showBuildingPoints}
-                    showFootprint={showFootprint}
-                    meshUrl={meshUrl}
-                    showMesh={showMesh}
-                    showMeshWireframe={showMeshWireframe}
-                    meshOpacity={meshOpacity}
-                    activePreset={activePreset}
-                    onCameraInfoChange={setCameraDebugInfo}
-                  />
-
+                  <LidarErrorBoundary>
+                    <PointCloudCanvas
+                      sampleData={sampleData}
+                      classifiedData={classifiedData}
+                      extractedBuilding={currentBld}
+                      scanVisibility={scanVisibility}
+                      showAxes={showAxes}
+                      showScanners={showScanners}
+                      pointSize={pointSize}
+                      showRawCloud={showRawCloud}
+                      showGroundPoints={showGroundPoints}
+                      showNonGroundPoints={showNonGroundPoints}
+                      showBuildingPoints={showBuildingPoints}
+                      showFootprint={showFootprint}
+                      meshUrl={meshUrl}
+                      showMesh={showMesh}
+                      showMeshWireframe={showMeshWireframe}
+                      meshOpacity={meshOpacity}
+                      activePreset={activePreset}
+                      onCameraInfoChange={setCameraDebugInfo}
+                    />
+                  </LidarErrorBoundary>
                 ) : (
                   <div className="lcv-loading" style={{ position: "absolute", inset: 0, background: "#0f172a", zIndex: 20 }}>
                     <p style={{ color: "#f59e0b" }}>⚠️ Point cloud sample unavailable.</p>
@@ -251,7 +262,6 @@ export default function LocalLidarViewer({ onClose }) {
                   <button className={activePreset === "front" ? "active" : ""} onClick={() => handlePresetClick("front")}>▶ Front</button>
                   <button className={activePreset === "side" ? "active" : ""} onClick={() => handlePresetClick("side")}>◀ Side</button>
                 </div>
-
               </div>
 
               {/* RIGHT: Controls Panel */}
@@ -603,7 +613,6 @@ export default function LocalLidarViewer({ onClose }) {
                     </div>
                   </div>
                 )}
-
               </div>
             </div>
           )}

@@ -1,0 +1,217 @@
+{
+  "dataset_name": "2zz6-k952_aerial",
+  "total_images": 18,
+  "cameras_detected": [
+    "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000 FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+  ],
+  "single_camera_consistent": true,
+  "gps_metadata_available": true,
+  "gps_image_count": 18,
+  "gps_image_percentage": 100.0,
+  "georeferencing": {
+    "photogrammetry_georeferenced": false,
+    "coordinate_frame": "PHOTOGRAMMETRIC_LOCAL",
+    "crs": null,
+    "note": "EXIF GPS metadata present but does NOT constitute authoritative georeferencing. Requires GCP alignment or explicit geo-registration."
+  },
+  "exif_details": [
+    {
+      "filename": "DR-HAF-IVD-1-S5-P1.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:31:41",
+      "has_gps": true,
+      "latitude": 6.9547711,
+      "longitude": 72.9269106,
+      "altitude_m": 1.64
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P10.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:32:37",
+      "has_gps": true,
+      "latitude": 6.9545943,
+      "longitude": 72.926842,
+      "altitude_m": 1.74
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P11.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:32:40",
+      "has_gps": true,
+      "latitude": 6.9546128,
+      "longitude": 72.9268356,
+      "altitude_m": 1.54
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P12.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:32:51",
+      "has_gps": true,
+      "latitude": 6.9546596,
+      "longitude": 72.9268151,
+      "altitude_m": 1.64
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P13.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:33:00",
+      "has_gps": true,
+      "latitude": 6.9546761,
+      "longitude": 72.9268164,
+      "altitude_m": 1.74
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P14.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:33:07",
+      "has_gps": true,
+      "latitude": 6.9547091,
+      "longitude": 72.9268327,
+      "altitude_m": 1.64
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P15.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:33:14",
+      "has_gps": true,
+      "latitude": 6.9547319,
+      "longitude": 72.9268592,
+      "altitude_m": 1.54
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P16.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:33:20",
+      "has_gps": true,
+      "latitude": 6.9547422,
+      "longitude": 72.9268752,
+      "altitude_m": 1.64
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P17.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:33:28",
+      "has_gps": true,
+      "latitude": 6.9547431,
+      "longitude": 72.9268876,
+      "altitude_m": 1.54
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P18.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:33:32",
+      "has_gps": true,
+      "latitude": 6.9547419,
+      "longitude": 72.9269044,
+      "altitude_m": 1.54
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P2.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:31:49",
+      "has_gps": true,
+      "latitude": 6.9547442,
+      "longitude": 72.9269597,
+      "altitude_m": 1.74
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P3.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:31:59",
+      "has_gps": true,
+      "latitude": 6.9546949,
+      "longitude": 72.92698,
+      "altitude_m": 1.74
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P4.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:32:11",
+      "has_gps": true,
+      "latitude": 6.9546784,
+      "longitude": 72.9269839,
+      "altitude_m": 1.74
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P5.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:32:15",
+      "has_gps": true,
+      "latitude": 6.9546449,
+      "longitude": 72.9269747,
+      "altitude_m": 1.64
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P6.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:32:21",
+      "has_gps": true,
+      "latitude": 6.9546225,
+      "longitude": 72.9269628,
+      "altitude_m": 1.64
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P7.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:32:28",
+      "has_gps": true,
+      "latitude": 6.9545937,
+      "longitude": 72.9269346,
+      "altitude_m": 1.54
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P8.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:32:32",
+      "has_gps": true,
+      "latitude": 6.9545854,
+      "longitude": 72.9268958,
+      "altitude_m": 1.54
+    },
+    {
+      "filename": "DR-HAF-IVD-1-S5-P9.JPG",
+      "camera_make": "DJI\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "camera_model": "FC6310\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+      "focal_length_mm": 8.8,
+      "timestamp": "2019:11:07 09:32:34",
+      "has_gps": true,
+      "latitude": 6.9545881,
+      "longitude": 72.9268658,
+      "altitude_m": 1.64
+    }
+  ]
+}
